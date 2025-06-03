@@ -1,0 +1,5 @@
+RewriteEngine On
+RewriteBase /clients/mockups/viron/
+
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.*)\.html$ $1.php [L]
