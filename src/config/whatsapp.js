@@ -1,7 +1,8 @@
 const axios = require('axios');
 
 // After inserting into DB
-
+const WA_ACCESS_TOKEN = 'AAHn-2yHcP78wg1-QMHvcQRtjXuK3XX1hkQ';
+const PHONE_NUMBER_ID = '706018122592521';
 
 
 function validatePhoneNumber(phoneNumber) {

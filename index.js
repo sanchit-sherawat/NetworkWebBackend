@@ -20,6 +20,7 @@ const routeMap = {
   testimonials: 'testimonials.html',
   register: 'register.html',
   login: 'login.html',
+  'set-password': 'set-password.html',
   
   
   // add more as needed

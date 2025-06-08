@@ -3,8 +3,7 @@
 //   service: 'SendGrid',
 //   auth: {
 //     user: 'apikey',
-//     pass: '',
-//   }
+//     pass: '
 // });
 // module.exports = transporter;
 const sgMail = require('@sendgrid/mail');
