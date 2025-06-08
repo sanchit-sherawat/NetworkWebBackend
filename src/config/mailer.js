@@ -1,9 +1,12 @@
-const nodemailer = require('nodemailer');
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'your_email@gmail.com',
-    pass: 'your_app_password'
-  }
-});
-module.exports = transporter;
+// const nodemailer = require('nodemailer');
+// const transporter = nodemailer.createTransport({
+//   service: 'SendGrid',
+//   auth: {
+//     user: 'apikey',
+//     pass: '',
+//   }
+// });
+// module.exports = transporter;
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey('');
+module.exports = sgMail;
