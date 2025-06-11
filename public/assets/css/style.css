@@ -37,10 +37,6 @@ body {
   color: var(--redColor)
 }
 
-.banner-btn {
-    margin-top: 20px;
-}
-
 .text-dark-red{
   color: var(--darkRedColor)
 }
@@ -1247,7 +1243,7 @@ ABOUT AREA CSS
   padding-left: 0;
   margin-bottom: 30px;
 }
-.about-text li::before {
+.about-text ul>li::before {
   font-family: 'boxicons' !important;
     font-weight: normal;
     font-style: normal;
