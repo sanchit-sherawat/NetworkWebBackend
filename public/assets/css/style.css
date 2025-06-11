@@ -45,6 +45,10 @@ body {
   color: var(--mainColor);
 }
 
+.banner-btn{
+  margin-top:20px;
+}
+
 a {
   display: inline-block;
   -webkit-transition: all 0.5s;
