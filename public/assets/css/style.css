@@ -37,6 +37,10 @@ body {
   color: var(--redColor)
 }
 
+.banner-btn {
+    margin-top: 20px;
+}
+
 .text-dark-red{
   color: var(--darkRedColor)
 }
