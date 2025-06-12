@@ -48,7 +48,9 @@ body {
 .banner-btn{
   margin-top:20px;
 }
-
+.text-tabing{
+  padding-left:70px;
+}
 a {
   display: inline-block;
   -webkit-transition: all 0.5s;
