@@ -2474,11 +2474,11 @@ INNER PAGES CSS
 PAGE TITLE AREA CSS
 <<<<======================================================>>>>*/
 .page-title-area {
-  background-color: #F9FAFA;
-  /*background-image: url(../../assets/img/banner/inner-banner.jpg);
+  /*background-color: #F9FAFA;*/
+  background-image: url(../../assets/img/banner/inner-banner.jpg);
   background-position: center center;
   background-repeat: no-repeat;
-  background-size: cover; */
+  background-size: cover; 
   position: relative;
   z-index: 1;
   padding-top: 70px;
