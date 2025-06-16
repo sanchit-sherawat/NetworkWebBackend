@@ -35,6 +35,8 @@
 	<link rel="stylesheet" href="assets/css/style.css">
 	<!-- RESPONSIVE CSS -->
 	<link rel="stylesheet" href="assets/css/responsive.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/css/intlTelInput.css" />
+
 </head>
 
 <body>
@@ -142,32 +144,49 @@
 			<div class="contact-form-action">
 				<div data-aos="fade-up" data-aos-duration="1200" class="section-title">
 					<h2>IF YOU HAVE A SPONSOR</h2>
-					<p class="text-left">If you know the person who referred you to this Site, please provide their Username and as much information about them as you can, so that we can properly honor them and give them credit for your introduction.</p>
-					<p class="text-left text-red"><b>*If you do not have a Sponsor, you can proceed by clicking: “CONTINUE”</b></p>
+					<p class="text-left">If you know the person who referred you to this Site, please provide their
+						Username and as much information about them as you can, so that we can properly honor them and
+						give them credit for your introduction.</p>
+					<p class="text-left text-red"><b>*If you do not have a Sponsor, you can proceed by clicking:
+							“CONTINUE”</b></p>
 				</div>
 				<!-- ...existing code... -->
-				<form id="registerForm" data-aos="fade-up" data-aos-duration="1600" >
+				<form id="registerForm" data-aos="fade-up" data-aos-duration="1600">
 					<div class="row">
 						<div class="col-12">
 							<div class="form-group">
-								<input class="form-control" type="text" name="first_name" placeholder="Username of Your Referrer"
+								<input class="form-control" id="user_name" type="text" name="user_name"
+									placeholder="Username of Your Referrer" required>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="form-group">
+								<input class="form-control" id="first_name" type="text" name="first_name"
+									placeholder="First Name of Your Referrer" required>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="form-group">
+								<input class="form-control" id="last_name" type="text" name="last_name"
+									placeholder="Last Name of Your Referrer" required>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="form-group">
+								<input class="form-control" id="email" type="email" name="email"
+									placeholder="Email of Your Referrer" required>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="form-group">
+								<input id="phone" class="form-control"  type="tel" name="phone"
+									placeholder="Phone Number of Your Referrer" required>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="form-group">
+								<input class="form-control" type="password" id="password" name="password" placeholder="Password"
 									required>
-							</div>
-						</div>
-						<div class="col-12">
-							<div class="form-group">
-								<input class="form-control" type="text" name="last_name" placeholder="Last Name of Your Referrer"
-									required>
-							</div>
-						</div>
-						<div class="col-12">
-							<div class="form-group">
-								<input class="form-control" type="email" name="email" placeholder="Email of Your Referrer" required>
-							</div>
-						</div>
-						<div class="col-12">
-							<div class="form-group">
-								<input class="form-control" type="tel" name="phone" placeholder="Phone Number of Your Referrer" required>
 							</div>
 						</div>
 						<div class="col-12">
@@ -304,7 +323,9 @@
 		<div class="container">
 			<div class="copy-right">
 				<p>Copyright <i class="bx bx-copyright"></i> 2025 VIRON.NETWORK. All rights reserved.</p>
-				<p><a href="faq.html"><b>FAQ</b></a> | <a href="privacy-policy.html"><b>Privacy Policy</b></a> | <a href="disclaimer.html"><b>Disclaimer</b></a> | <a href="terms-of-use.html"><b>Terms of Use</b></a> | <a href="service-agreement.html"><b>Service Agreement</b></a></p>
+				<p><a href="faq.html"><b>FAQ</b></a> | <a href="privacy-policy.html"><b>Privacy Policy</b></a> | <a
+						href="disclaimer.html"><b>Disclaimer</b></a> | <a href="terms-of-use.html"><b>Terms of
+							Use</b></a> | <a href="service-agreement.html"><b>Service Agreement</b></a></p>
 			</div>
 		</div>
 	</footer>
@@ -338,18 +359,31 @@
 	<script src="assets/js/aos.js"></script>
 	<!-- CUSTOM JS -->
 	<script src="assets/js/custom.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/intlTelInput.min.js"></script>
+	
 
 	<!-- <script> -->
 	<script>
+		const input = document.querySelector("#phone");
+		const iti = window.intlTelInput(input, {
+			separateDialCode: false,
+			preferredCountries: ["in", "us", "gb"],
+			utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js"
+		});
+
 		document.getElementById('registerForm').addEventListener('submit', async function (e) {
 			e.preventDefault();
 
 			const form = e.target;
+			const fullPhone = iti.getNumber(); // E.g. +919876543210
+
 			const data = {
+				username: form.user_name.value,
+				password: form.password.value,
 				firstName: form.first_name.value,
 				lastName: form.last_name.value,
 				email: form.email.value,
-				phoneNumber: form.phone.value
+				phoneNumber: fullPhone
 			};
 
 			try {
@@ -373,6 +407,36 @@
 			}
 		});
 	</script>
+	<script>
+		const usernameInput = document.getElementById('user_name');
+		const usernameMessage = document.getElementById('username-check-message');
+
+		usernameInput.addEventListener('blur', async () => {
+			const username = usernameInput.value.trim();
+
+			// Clear message if input is empty
+			if (!username) {
+				usernameMessage.textContent = '';
+				return;
+			}
+
+			try {
+				const response = await fetch(`/api/check-username?username=${encodeURIComponent(username)}`);
+				const result = await response.json();
+
+				if (!response.ok || !result.exists) {
+					usernameMessage.textContent = 'User not found. Try another or proceed without a sponsor.';
+				} else {
+					usernameMessage.textContent = ''; // Clear message if valid
+				}
+			} catch (error) {
+				console.error('Error checking username:', error);
+				usernameMessage.textContent = 'Error checking username. Try again later.';
+			}
+		});
+	</script>
+
+
 </body>
 
 </html>

@@ -2,6 +2,8 @@ const express = require('express');
 const path = require('path');
 const app = express();
 const authRoutes = require('./src/routes/api/auth');
+const adminapai = require('./src/routes/api/adminapi')
+const cors = require('cors');
 
 // Add this line to parse JSON bodies!
 app.use(express.json());
@@ -21,11 +23,15 @@ const routeMap = {
   register: 'register.html',
   login: 'login.html',
   'set-password': 'set-password.html',
+  confirmation:'registration-confirmation.html',
   
   
   // add more as needed
 };
+
+app.use(cors())
 app.use('/api', authRoutes);
+app.use('/adminapi',adminapai)
 
 // Dynamic route using the map
 app.get('/:page', (req, res) => {
