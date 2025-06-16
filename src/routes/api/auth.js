@@ -65,7 +65,7 @@ router.post('/register', (req, res) => {
   <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:800px; background-color:#ffffff; font-family: Arial, sans-serif; color:#333333; line-height:1.6;">
     <tr>
       <td style="padding: 30px;">
-        <p>Hello First Name / Last Name,</p>
+        <p>Hello ${firstName} ${lastName},</p>
         <p>Your registration has been received and your VIRON.NETWORK account has been created.</p>
         <p>You are now registered and it is valuably <strong><u>Time &amp; Date Stamped</u></strong>.</p>
         <p>Before you log in, please take a couple of minutes to review this entire message.</p>
@@ -76,12 +76,12 @@ router.post('/register', (req, res) => {
         <div style="border: 2px solid #D00000; padding: 30px;">
         <p>To finalize your Viron account, please log in to your back-office now and complete the critical instructions displayed there.</p>
         <p>To log in to your VIRON.NETWORK account, use the username and password you provided during registration:</p>
-        <p><strong>Username:</strong> testV<br>
-        <strong>Password:</strong> testV</p>
+        <p><strong>Username:</strong> ${username}<br>
+        <strong>Password:</strong> ${password}</p>
 
-        <p><strong>Login to Member-Center here:</strong><br /><a href="login.html" style="display: inline-block; padding: 12px 24px; background-color: #D00000; color: #ffffff; text-decoration: none; border-radius: 4px;">Login</a></p>
+        <p><strong>Login to Member-Center here:</strong><br /><a href="http://148.113.201.173:4000/#/login" style="display: inline-block; padding: 12px 24px; background-color: #D00000; color: #ffffff; text-decoration: none; border-radius: 4px;">Login</a></p>
         <p style="font-size: 12px; color: #888888;">*We advise you to secure your password and not reveal it to anyone.</p>
-        </div>
+        </div>  
       </td>
     </tr>
     <tr>
