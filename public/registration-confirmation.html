@@ -84,7 +84,7 @@
 									<a href="register" class="default-btn icon menu-btn-style">
 										Registration
 									</a> &nbsp;
-									<a href="login" class="default-btn blue-btn icon menu-btn-style">
+									<a href="http://148.113.201.173:4000/#/login" class="default-btn blue-btn icon menu-btn-style">
 										Login
 									</a>	
 							    </div>
@@ -114,7 +114,7 @@
 									<a href="register" class="default-btn icon menu-btn-style">Registration</a>
 							    </div>
 								<div class="nav-others-option d-flex align-items-center">
-									<a href="login" class="default-btn blue-btn icon menu-btn-style">Login</a>
+									<a href="http://148.113.201.173:4000/#/login" class="default-btn blue-btn icon menu-btn-style">Login</a>
 							    </div>
 							</div>
 	                    </div>
@@ -141,7 +141,7 @@
 				<div class="row align-items-center">
 					<div data-aos="fade-up" data-aos-duration="1200" class="col-lg-12">
                         <div class="about-text">
-                            <p>Hello&nbsp;First Name / Last Name,</p>
+                            <p>Hello&nbsp;<span id="firstName-display"></span>&nbsp;<span id="lastName-display"></span>,</p>
                             <p>Your Registration has been received and your Viron.Network account has been created.</p>
                             <p>You are now registered and is valuably&nbsp;<strong><u>Time &amp; Date Stamped</u></strong>.</p>
                             <p>Before you log-in, please take a couple minutes to review this entire page</p>
@@ -149,8 +149,8 @@
 						<div class="about-text text-center" style="margin-top: 30px; padding: 30px 30px 10px 30px; border:2px solid #D00000;">
                             <p>To finalize your Viron account, please log into your back-office now, <br />and complete the critical instructions that is displayed there.</p>
                             <p>To Log-in your Viron.Network account, use the Username and Password you&rsquo;ve just provided during your Registration, which is as follows:</p>
-                            <p><strong>UserName:</strong>&nbsp;testV<br /><strong>Password:</strong>&nbsp;testV</p>
-                            <p><strong>Login to Member-Center here:</strong><br /><a href="login.html" class="default-btn">Login</a></p>
+                            <p><strong>UserName:</strong>&nbsp;<span id="username-display"></span><br /><strong>Password:</strong>&nbsp;<span id="password-display"></span></p>
+                            <p><strong>Login to Member-Center here:</strong><br /><a href="http://148.113.201.173:4000/#/login" class="default-btn">Login</a></p>
                             <p>*We advise you to secure your password and do not reveal it to anyone.</p>
                         </div>
 						<div class="about-text" style="margin-top: 30px;">
@@ -241,7 +241,7 @@
 							<h3>Access</h3>
 							<ul>
 								<li>
-									<a href="login" class="default-btn blue-btn">
+									<a href="http://148.113.201.173:4000/#/login class="default-btn blue-btn">
 										Login
 									</a>
 								</li>
@@ -326,5 +326,31 @@
 		<script src="assets/js/aos.js"></script>
 		<!-- CUSTOM JS -->
 		<script src="assets/js/custom.js"></script>
-    </body>
+		<script>
+window.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const username = params.get('username');
+ 
+    const firstName = params.get('firstName');
+    const lastName = params.get('lastName');
+
+    const password = params.get('password'); // Assuming password is also passed as a query parameter
+
+    if (username) {
+        document.getElementById('username-display').textContent = username;
+    }
+   
+    if (firstName) {
+        document.getElementById('firstName-display').textContent = firstName;
+    }
+    if (lastName) {
+        document.getElementById('lastName-display').textContent = lastName;
+    }
+    if (password) {
+        document.getElementById('password-display').textContent = password;
+    }
+});
+</script>
+
+</body>
 </html>

@@ -12,10 +12,11 @@ router.post('/register', (req, res) => {
 
   const {
     firstName,
+    password,
     lastName,
     email,
     phoneNumber,
-    userName,
+    username,
     isAdmin = 0,
     userReferId = null
   } = req.body;
@@ -39,13 +40,13 @@ router.post('/register', (req, res) => {
     // Insert user with optional fields
     const insertQuery = `
       INSERT INTO users (
-        first_name, last_name, email, phone_number, user_name, is_admin, user_refer_id
-      ) VALUES (?, ?, ?, ?, ?, ?, ?)
+        first_name, last_name, email, phone_number, user_name, is_admin, user_refer_id, password
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
     db.query(
       insertQuery,
-      [firstName, lastName, email, phoneNumber, userName || null, isAdmin, userReferId],
+      [firstName, lastName, email, phoneNumber, username , isAdmin, userReferId, password],
       (err2, result) => {
         if (err2) return res.status(500).json({ message: 'Error inserting user', error: err2 });
         
@@ -78,17 +79,34 @@ router.post('/register', (req, res) => {
 
 
 // Login API
+const jwt = require('jsonwebtoken'); // Add this at the top
+
+// Login API
 router.post('/login', (req, res) => {
+  console.log("login user detail. :", req.body)
   const { username, password } = req.body;
   db.query(
-    'SELECT * FROM users WHERE username = ? AND password = ?',
+    'SELECT * FROM users WHERE user_name = ? AND password = ?',
     [username, password],
     (err, results) => {
       if (err) return res.status(500).json({ message: 'Database error' });
       if (results.length === 0) {
         return res.status(401).json({ message: 'Invalid credentials' });
       }
-      res.json({ message: 'Login successful' });
+      const user = results[0];
+      // Create JWT token
+      const token = jwt.sign(
+        { userId: user.id, username: user.user_name },
+        process.env.JWT_SECRET || 'your_jwt_secret',
+        { expiresIn: '7d' }
+      );
+      res.json({
+        message: 'Login successful',
+        token,
+        username: user.user_name,
+        userId: user.id,
+        isAdmin: user.is_admin,
+      });
     }
   );
 });
@@ -166,12 +184,19 @@ router.put('/users/:id', (req, res) => {
   );
 });
 
-// Delete user by ID
-router.delete('/users/:id', (req, res) => {
-  const userId = req.params.id;
-  db.query('DELETE FROM users WHERE id = ?', [userId], (err, result) => {
+
+
+// Check if username exists API
+router.get('/check-username', (req, res) => {
+  const { username } = req.query;
+  if (!username) {
+    return res.status(400).json({ message: 'Username is required' });
+  }
+
+  db.query('SELECT id FROM users WHERE user_name = ?', [username], (err, results) => {
     if (err) return res.status(500).json({ message: 'Database error', error: err });
-    res.json({ message: 'User deleted successfully' });
+    // If results.length === 0, username does not exist (valid for new registration)
+    res.json({ exists: results.length > 0 });
   });
 });
 

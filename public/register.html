@@ -157,6 +157,7 @@
 							<div class="form-group">
 								<input class="form-control" id="user_name" type="text" name="user_name"
 									placeholder="Username of Your Referrer" required>
+								<small id="username-check-message" style="color:red;"></small>
 							</div>
 						</div>
 						<div class="col-12">
@@ -179,18 +180,18 @@
 						</div>
 						<div class="col-12">
 							<div class="form-group">
-								<input id="phone" class="form-control"  type="tel" name="phone"
+								<input id="phone" class="form-control" type="tel" name="phone"
 									placeholder="Phone Number of Your Referrer" required>
 							</div>
 						</div>
 						<div class="col-12">
 							<div class="form-group">
-								<input class="form-control" type="password" id="password" name="password" placeholder="Password"
-									required>
+								<input class="form-control" type="password" id="password" name="password"
+									placeholder="Password" required>
 							</div>
 						</div>
 						<div class="col-12">
-							<button class="default-btn btn-two" type="submit">
+							<button class="default-btn btn-two" type="submit" id="register-submit-btn">
 								Continue
 							</button>
 						</div>
@@ -360,7 +361,7 @@
 	<!-- CUSTOM JS -->
 	<script src="assets/js/custom.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/intlTelInput.min.js"></script>
-	
+
 
 	<!-- <script> -->
 	<script>
@@ -397,8 +398,8 @@
 
 				const result = await response.json();
 				if (response.ok) {
-					alert('Registration successful!');
-					form.reset();
+					// Redirect to confirmation page
+					window.location.href = `registration-confirmation.html?username=${encodeURIComponent(data.username)}&email=${encodeURIComponent(data.email)}&firstName=${encodeURIComponent(data.firstName)}&lastName=${encodeURIComponent(data.lastName)}&password=${encodeURIComponent(data.password)}`;
 				} else {
 					alert(result.message || 'Registration failed.');
 				}
@@ -410,6 +411,9 @@
 	<script>
 		const usernameInput = document.getElementById('user_name');
 		const usernameMessage = document.getElementById('username-check-message');
+		const submitBtn = document.getElementById('register-submit-btn');
+
+		let usernameAvailable = false;
 
 		usernameInput.addEventListener('blur', async () => {
 			const username = usernameInput.value.trim();
@@ -417,6 +421,8 @@
 			// Clear message if input is empty
 			if (!username) {
 				usernameMessage.textContent = '';
+				submitBtn.disabled = true;
+				usernameAvailable = false;
 				return;
 			}
 
@@ -424,17 +430,37 @@
 				const response = await fetch(`/api/check-username?username=${encodeURIComponent(username)}`);
 				const result = await response.json();
 
-				if (!response.ok || !result.exists) {
-					usernameMessage.textContent = 'User not found. Try another or proceed without a sponsor.';
+				if (!response.ok) {
+					usernameMessage.textContent = 'Error checking username. Try again later.';
+					submitBtn.disabled = true;
+					usernameAvailable = false;
+				} else if (!result.exists) {
+					usernameMessage.textContent = 'Username is Available.';
+					usernameMessage.style.color = 'green';
+					submitBtn.disabled = false;
+					usernameAvailable = true;
 				} else {
-					usernameMessage.textContent = ''; // Clear message if valid
+					usernameMessage.textContent = 'Username is not available.';
+					usernameMessage.style.color = 'red';
+					submitBtn.disabled = true;
+					usernameAvailable = false;
 				}
 			} catch (error) {
-				console.error('Error checking username:', error);
 				usernameMessage.textContent = 'Error checking username. Try again later.';
+				submitBtn.disabled = true;
+				usernameAvailable = false;
+			}
+		});
+
+		// Prevent form submission if username is not available
+		document.getElementById('registerForm').addEventListener('submit', function (e) {
+			if (!usernameAvailable) {
+				e.preventDefault();
+				alert('Please choose an available username before submitting.');
 			}
 		});
 	</script>
+
 
 
 </body>
