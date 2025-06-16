@@ -55,8 +55,59 @@ router.post('/register', (req, res) => {
           to: email,
           from: "admin@viron.network",
           subject: 'Complete Your Registration - Set Your Password',
-          html: `<p>Hi <b>${firstName} ${lastName}</b>,</p>
-                     <p>Thank you for registering on Viron Network.</p>`,
+          html: `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Registration Confirmation - VIRON.NETWORK</title>
+</head>
+<body style="margin:0; padding:0; background-color:#f5f5f5;">
+  <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:800px; background-color:#ffffff; font-family: Arial, sans-serif; color:#333333; line-height:1.6;">
+    <tr>
+      <td style="padding: 30px;">
+        <p>Hello First Name / Last Name,</p>
+        <p>Your registration has been received and your VIRON.NETWORK account has been created.</p>
+        <p>You are now registered and it is valuably <strong><u>Time &amp; Date Stamped</u></strong>.</p>
+        <p>Before you log in, please take a couple of minutes to review this entire message.</p>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding: 30px; text-align: center;">
+        <div style="border: 2px solid #D00000; padding: 30px;">
+        <p>To finalize your Viron account, please log in to your back-office now and complete the critical instructions displayed there.</p>
+        <p>To log in to your VIRON.NETWORK account, use the username and password you provided during registration:</p>
+        <p><strong>Username:</strong> testV<br>
+        <strong>Password:</strong> testV</p>
+
+        <p><strong>Login to Member-Center here:</strong><br /><a href="login.html" style="display: inline-block; padding: 12px 24px; background-color: #D00000; color: #ffffff; text-decoration: none; border-radius: 4px;">Login</a></p>
+        <p style="font-size: 12px; color: #888888;">*We advise you to secure your password and not reveal it to anyone.</p>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding: 30px;">
+        <p style="text-align: center;"><strong>FOR YOUR CONVENIENCE</strong></p>
+        <p>For your records, we have also sent you an email containing the above information. *Just in case, please check your inbox and spam folder.</p>
+        <p style="text-align: center;"><strong>GENERAL NOTICES &amp; FYIs:</strong></p>
+        <ul>
+          <li>All sales and purchases are subject to the Viron <strong>Terms of Use</strong> described at: <a href="http://www.VIRON.NETWORK/termsofuse.pdf" style="color: #6ecaf4;">http://www.VIRON.NETWORK/termsofuse.pdf</a>. These Terms of Use govern the VIRON.NETWORK website and its members. They are located at the bottom of every web page on the VIRON.NETWORK website. Further, all Viron Members, including you, acknowledge and agree to them every time you log in. So please review them entirely.</li>
+          <li><strong>Important:</strong> Although Viron will do ALL the major work for you, it is imperative you understand that it is <em><u>YOUR</u></em> business. We recommend you visit all pages of the website and review all areas of your VIRON Back-Office to become familiar and fully grasp VIRON’s game-changing existence.</li>
+        </ul>
+        <p>If you have any questions or need help, the best way to contact Member Support is to email us at: <a href="mailto:HelpDesk@VIRON.NETWORK" style="color: #6ecaf4;">HelpDesk@VIRON.NETWORK</a> and our team will be happy to assist you during regular business hours.</p>
+        <p><em><strong>Congratulations and Welcome to the Evolution of Network Marketing!</strong></em></p>
+        <p>To your success!</p>
+        <p><strong>- VIRON Administration Team</strong></p>
+      </td>
+    </tr>
+    <tr>
+      <td style="background-color:#f5f5f5; text-align:center; padding:20px; font-size:12px; color:#777;">
+        &copy; 2025 VIRON.NETWORK. All rights reserved.
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+`,
         };
 
         sgMail.send(msg)
