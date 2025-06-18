@@ -53,7 +53,7 @@ router.post('/register', (req, res) => {
 
     db.query(
       insertQuery,
-      [firstName, lastName, email, phoneNumber, username , isAdmin, userReferId, password],
+      [firstName, lastName, email, phoneNumber, username , isAdmin, userReferId, password,isConfirmation],
       (err2, result) => {
         if (err2) return res.status(500).json({ message: 'Error inserting user', error: err2 });
         
