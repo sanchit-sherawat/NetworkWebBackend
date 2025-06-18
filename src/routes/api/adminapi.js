@@ -157,17 +157,26 @@ router.put('/users/:id/refer', adminOnly, (req, res) => {
             if (result.affectedRows === 0) return res.status(404).json({ message: 'User not found' });
 
             // Get emails for both users
-            db.query('SELECT email,first_name,last_name FROM users WHERE id IN (?, ?)', [userId, userReferId], (err2, results) => {
-                if (err2) return res.status(500).json({ message: 'Database error', error: err2 });
-                if (results.length < 2) return res.status(404).json({ message: 'One or both users not found' });
+            db.query(
+                'SELECT id, email, first_name, last_name, user_name FROM users WHERE id IN (?, ?)',
+  [userId, userReferId],
+  (err2, results) => {
+    if (err2) return res.status(500).json({ message: 'Database error', error: err2 });
+    if (results.length < 2) return res.status(404).json({ message: 'One or both users not found' });
 
-                // Find which email belongs to which user
-                const userEmail = results.find(u => u.id == userId)?.email;
-                const referEmail = results.find(u => u.id == userReferId)?.email;
-                const userFirstName = results.find(u => u.id == userId)?.first_name ;
-                const userLastName = results.find(u => u.id == userId)?.last_name ;
-                const referFirstName = results.find(u => u.id == userReferId)?.first_name ;
-                const referLastName = results.find(u => u.id == userReferId)?.last_name ;
+    const userEmail = results.find(u => u.id == userId)?.email;
+    const referEmail = results.find(u => u.id == userReferId)?.email;
+
+    const userFirstName = results.find(u => u.id == userId)?.first_name;
+    const userLastName = results.find(u => u.id == userId)?.last_name;
+    const userUsername = results.find(u => u.id == userId)?.user_name;
+
+    const referFirstName = results.find(u => u.id == userReferId)?.first_name;
+    const referLastName = results.find(u => u.id == userReferId)?.last_name;
+    const referUsername = results.find(u => u.id == userReferId)?.user_name;
+
+    console.log({ userEmail, referEmail, userFirstName, referFirstName, userUsername, referUsername });
+
 
                 const msgToUser = {
                     to: userEmail,
@@ -295,6 +304,8 @@ router.put('/users/:id/refer', adminOnly, (req, res) => {
 
   `
                 };
+                // console.log("msgToUser is :", msgToUser)
+                // console.log("msgToRefer is :", msgToRefer)
 
                 Promise.all([sgMail.send(msgToUser), sgMail.send(msgToRefer)])
                     .then(() => res.json({ message: 'User refer updated and emails sent successfully' }))
