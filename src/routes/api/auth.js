@@ -220,13 +220,48 @@ router.post('/payment', normalUser, (req, res) => {
 });
 
 
-// Get all users
-router.get('/users', adminOnly,(req, res) => {
-  db.query('SELECT id, first_name, last_name, email, phone_number, user_name, is_admin, user_refer_id FROM users', (err, results) => {
+router.get('/users', adminOnly, (req, res) => {
+  const userSql = `
+    SELECT 
+      u.id, u.first_name, u.last_name, u.email, u.phone_number, u.user_name, u.is_admin, u.user_refer_id,
+      p.btc_transaction, p.eth_transaction, p.usdt_transaction
+    FROM users u
+    LEFT JOIN payment_transaction p ON u.id = p.user_id
+  `;
+
+  console.log("userSql is :", userSql)
+
+  db.query(userSql, (err, results) => {
     if (err) return res.status(500).json({ message: 'Database error', error: err });
-    res.json(results);
+
+    console.log("results are :", results)
+
+    // Map results to include transaction type and value
+    const users = results.map(user => {
+      let transaction = null;
+      if (user.btc_transaction) {
+        transaction = { type: 'btc_transaction', value: user.btc_transaction };
+      } else if (user.eth_transaction) {
+        transaction = { type: 'eth_transaction', value: user.eth_transaction };
+      } else if (user.usdt_transaction) {
+        transaction = { type: 'usdt_transaction', value: user.usdt_transaction };
+      }
+      // Remove raw transaction columns from output
+      const { btc_transaction, eth_transaction, usdt_transaction, ...userData } = user;
+      return { ...userData, transaction };
+    });
+
+    res.json(users);
   });
 });
+
+// // Get all users
+// router.get('/users', adminOnly,(req, res) => {
+//   db.query('SELECT id, first_name, last_name, email, phone_number, user_name, is_admin, user_refer_id FROM users', (err, results) => {
+//     if (err) return res.status(500).json({ message: 'Database error', error: err });
+//     res.json(results);
+//   });
+// });
 
 // Get user by ID
 router.get('/users/:id', (req, res) => {
@@ -346,6 +381,41 @@ router.put('/users/:id/confirm', adminOnly, (req, res) => {
       res.json({ message: 'User confirmation status updated successfully' });
     }
   );
+});
+
+
+// Helper for email validation
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+// Update password by email
+router.put('/update-password', (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({ message: 'Email and password are required' });
+  }
+
+  if (!isValidEmail(email)) {
+    return res.status(400).json({ message: 'Email is not valid' });
+  }
+
+  // Check if user exists
+  db.query('SELECT id FROM users WHERE email = ?', [email], (err, results) => {
+    if (err) return res.status(500).json({ message: 'Database error', error: err });
+    if (results.length === 0) return res.status(404).json({ message: 'User not found' });
+
+    // Update password
+    db.query(
+      'UPDATE users SET password = ? WHERE email = ?',
+      [password, email],
+      (err2, result) => {
+        if (err2) return res.status(500).json({ message: 'Database error', error: err2 });
+        res.json({ message: 'Password updated successfully' });
+      }
+    );
+  });
 });
 
 

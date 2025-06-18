@@ -5,6 +5,7 @@ const sgMail = require('../../config/mailer');
 const validatePhoneNumber = require('../../config/whatsapp');
 const { v4: uuidv4 } = require('uuid');
 const PasswordLink = require('../../models/password');
+const { adminOnly, normalUser } = require('../Middleware');
 // ...existing code...
 
 // Create/Set Password API
@@ -49,9 +50,37 @@ router.post('/payment', async (req, res) => {
 
 // Get all users
 router.get('/users', (req, res) => {
-  db.query('SELECT id, first_name, last_name, email, phone_number, user_name, is_admin, user_refer_id FROM users', (err, results) => {
+  const userSql = `
+    SELECT 
+      u.id, u.first_name, u.last_name, u.email, u.phone_number, u.user_name, u.is_admin, u.user_refer_id,u.is_confirmation,
+      p.btc_transaction, p.eth_transaction, p.usdt_transaction
+    FROM users u
+    LEFT JOIN payment_transaction p ON u.id = p.user_id
+  `;
+
+  console.log("userSql is :", userSql)
+
+  db.query(userSql, (err, results) => {
     if (err) return res.status(500).json({ message: 'Database error', error: err });
-    res.json(results);
+
+    console.log("results are :", results)
+
+    // Map results to include transaction type and value
+    const users = results.map(user => {
+      let transaction = null;
+      if (user.btc_transaction) {
+        transaction = { type: 'btc_transaction', value: user.btc_transaction };
+      } else if (user.eth_transaction) {
+        transaction = { type: 'eth_transaction', value: user.eth_transaction };
+      } else if (user.usdt_transaction) {
+        transaction = { type: 'usdt_transaction', value: user.usdt_transaction };
+      }
+      // Remove raw transaction columns from output
+      const { btc_transaction, eth_transaction, usdt_transaction, ...userData } = user;
+      return { ...userData, transaction };
+    });
+
+    res.json(users);
   });
 });
 
@@ -85,6 +114,28 @@ router.delete('/users/:id', (req, res) => {
   db.query('DELETE FROM users WHERE id = ?', [userId], (err, result) => {
     if (err) return res.status(500).json({ message: 'Database error', error: err });
     res.json({ message: 'User deleted successfully' });
+  });
+});
+
+
+// Confirm user only if payment exists (admin only)
+router.put('/users/:id/confirm', adminOnly, (req, res) => {
+  const userId = req.params.id;
+
+  // Check if payment exists for this user
+  db.query('SELECT id FROM payment_transaction WHERE user_id = ?', [userId], (err, results) => {
+    if (err) return res.status(500).json({ message: 'Database error', error: err });
+
+    if (results.length === 0) {
+      return res.status(400).json({ message: 'No payment found for this user. Cannot confirm.' });
+    }
+
+    // Set is_confirmation = 1
+    db.query('UPDATE users SET is_confirmation = 1 WHERE id = ?', [userId], (err2, result) => {
+      if (err2) return res.status(500).json({ message: 'Database error', error: err2 });
+      if (result.affectedRows === 0) return res.status(404).json({ message: 'User not found' });
+      res.json({ message: 'User confirmed successfully.' });
+    });
   });
 });
 
