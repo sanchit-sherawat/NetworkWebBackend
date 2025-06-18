@@ -255,7 +255,7 @@ router.put('/users/:id', (req, res) => {
 
 
 // Check if username exists API
-router.get('/check-username', normalUser,(req, res) => {
+router.get('/check-username',(req, res) => {
   const { username } = req.query;
   if (!username) {
     return res.status(400).json({ message: 'Username is required' });
