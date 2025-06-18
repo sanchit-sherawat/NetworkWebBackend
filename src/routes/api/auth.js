@@ -6,6 +6,12 @@ const validatePhoneNumber = require('../../config/whatsapp');
 const { v4: uuidv4 } = require('uuid');
 const PasswordLink = require('../../models/password');
 const secret = process.env.RESET_SECRET || 'your-secret-key';
+const { adminOnly, normalUser } = require('../Middleware');
+
+
+
+// Login API
+const jwt = require('jsonwebtoken'); // Add this at the top
 
 router.post('/register', (req, res) => {
   console.log("regestriantoi user detail. :", req.body)
@@ -18,7 +24,8 @@ router.post('/register', (req, res) => {
     phoneNumber,
     username,
     isAdmin = 0,
-    userReferId = null
+    userReferId = null,
+    isConfirmation=0
   } = req.body;
 
   if (!firstName || !lastName || !email || !phoneNumber) {
@@ -40,8 +47,8 @@ router.post('/register', (req, res) => {
     // Insert user with optional fields
     const insertQuery = `
       INSERT INTO users (
-        first_name, last_name, email, phone_number, user_name, is_admin, user_refer_id, password
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        first_name, last_name, email, phone_number, user_name, is_admin, user_refer_id, password, is_confirmation
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
     db.query(
@@ -129,8 +136,6 @@ router.post('/register', (req, res) => {
 
 
 
-// Login API
-const jwt = require('jsonwebtoken'); // Add this at the top
 
 // Login API
 router.post('/login', (req, res) => {
@@ -187,24 +192,36 @@ router.post('/set-password', (req, res) => {
 });
 
 // POST /api/payment
-router.post('/payment', async (req, res) => {
+router.post('/payment', normalUser, (req, res) => {
   const { user_id, btc_txn, eth_txn, usdt_txn } = req.body;
 
-  try {
-    await db.query(
-      'INSERT INTO payment_transaction (user_id, btc_transaction, eth_transaction, usdt_transaction) VALUES (?, ?, ?, ?)',
-      [user_id, btc_txn, eth_txn, usdt_txn]
-    );
-    res.status(200).json({ message: 'Payment saved successfully' });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Error saving payment' });
-  }
+  // Check if payment already exists for this user
+  db.query(
+    'SELECT id FROM payment_transaction WHERE user_id = ?',
+    [user_id],
+    (err, results) => {
+      if (err) return res.status(500).json({ message: 'Database error', error: err });
+
+      if (results.length > 0) {
+        return res.status(409).json({ message: 'Payment already done, contact admin.' });
+      }
+
+      // If not, insert the payment
+      db.query(
+        'INSERT INTO payment_transaction (user_id, btc_transaction, eth_transaction, usdt_transaction) VALUES (?, ?, ?, ?)',
+        [user_id, btc_txn, eth_txn, usdt_txn],
+        (err2) => {
+          if (err2) return res.status(500).json({ message: 'Error saving payment', error: err2 });
+          res.status(200).json({ message: 'Payment saved successfully' });
+        }
+      );
+    }
+  );
 });
 
 
 // Get all users
-router.get('/users', (req, res) => {
+router.get('/users', adminOnly,(req, res) => {
   db.query('SELECT id, first_name, last_name, email, phone_number, user_name, is_admin, user_refer_id FROM users', (err, results) => {
     if (err) return res.status(500).json({ message: 'Database error', error: err });
     res.json(results);
@@ -238,7 +255,7 @@ router.put('/users/:id', (req, res) => {
 
 
 // Check if username exists API
-router.get('/check-username', (req, res) => {
+router.get('/check-username', normalUser,(req, res) => {
   const { username } = req.query;
   if (!username) {
     return res.status(400).json({ message: 'Username is required' });
@@ -250,6 +267,87 @@ router.get('/check-username', (req, res) => {
     res.json({ exists: results.length > 0 });
   });
 });
+// Update own user info (normal user)
+// Update own user info (normal user)
+router.put('/profile', normalUser, (req, res) => {
+  const userId = req.user.userId; // from JWT
+  const { firstName, lastName, email, phonenumber, username } = req.body;
+
+  const fields = [];
+  const values = [];
+
+  if (firstName !== "" && firstName !== undefined) {
+    fields.push('first_name = ?');
+    values.push(firstName);
+  }
+  if (lastName !== "" && lastName !== undefined) {
+    fields.push('last_name = ?');
+    values.push(lastName);
+  }
+  if (email !== "" && email !== undefined) {
+    fields.push('email = ?');
+    values.push(email);
+  }
+  if (phonenumber !== "" && phonenumber !== undefined) {
+    fields.push('phone_number = ?');
+    values.push(phonenumber);
+  }
+  if (username !== "" && username !== undefined) {
+    fields.push('user_name = ?');
+    values.push(username);
+  }
+
+  // Nothing to update
+  if (fields.length === 0) {
+    return res.status(400).json({ message: 'No valid fields to update' });
+  }
+
+  values.push(userId); // add userId for WHERE clause
+
+
+
+  const sql = `UPDATE users SET ${fields.join(', ')} WHERE id = ?`;
+
+  console.log("sql query is :", sql)
+  console.log("values are :", values)
+
+  db.query(sql, values, (err, result) => {
+    if (err) return res.status(500).json({ message: 'Database error', error: err });
+    res.json({ message: 'Profile updated successfully' });
+  });
+});
+
+// Get own profile (normal user)
+router.get('/profile', normalUser, (req, res) => {
+  const userId = req.user.userId; // from JWT
+
+  db.query(
+    'SELECT id, first_name, last_name, email, phone_number, user_name, is_admin, user_refer_id FROM users WHERE id = ?',
+    [userId],
+    (err, results) => {
+      if (err) return res.status(500).json({ message: 'Database error', error: err });
+      if (results.length === 0) return res.status(404).json({ message: 'User not found' });
+      res.json(results[0]);
+    }
+  );
+});
+
+// Admin: Confirm a user (set is_confirmation)
+router.put('/users/:id/confirm', adminOnly, (req, res) => {
+  const userId = req.params.id;
+  const { isConfirmation = 1 } = req.body; // default to 1 (confirmed)
+
+  db.query(
+    'UPDATE users SET is_confirmation = ? WHERE id = ?',
+    [isConfirmation, userId],
+    (err, result) => {
+      if (err) return res.status(500).json({ message: 'Database error', error: err });
+      if (result.affectedRows === 0) return res.status(404).json({ message: 'User not found' });
+      res.json({ message: 'User confirmation status updated successfully' });
+    }
+  );
+});
+
 
 // ...existing code...
 
