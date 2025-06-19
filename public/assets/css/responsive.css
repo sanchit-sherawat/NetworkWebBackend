@@ -1,5 +1,8 @@
 /* Max width 767px */
 @media only screen and (max-width: 767px) {
+   .text-tabing{
+  padding-left:0px;
+}
   .ptb-100 {
     padding-top: 50px;
     padding-bottom: 50px;
@@ -609,9 +612,7 @@
 
 /* Min width 768px to Max width 991px */
 @media only screen and (min-width: 768px) and (max-width: 991px) {
-  .text-tabing{
-  padding-left:0px;
-}
+ 
   .ptb-100 {
     padding-top: 50px;
     padding-bottom: 50px;
