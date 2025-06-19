@@ -1248,24 +1248,23 @@ ABOUT AREA CSS
   list-style: none;
   padding-left: 0;
   margin-bottom: 30px;
+  text-align: left;
 }
 .about-text ul>li::before {
   font-family: 'boxicons' !important;
     font-weight: normal;
     font-style: normal;
     font-variant: normal;
-    line-height: 1;
+    line-height: 2;
     display: inline-block;
     text-transform: none;
     speak: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-
-  content: "\e9f4"; /* Unicode for bx-check-circle */
-  font-size: 1em;
-  color: green;
-  margin-right: 8px;
-  vertical-align: middle;
+    content: "\e9f4"; /* Unicode for bx-check-circle */
+    font-size: 1em;
+    color: green;
+    margin-right: 8px;
 }
 .about-text h4 {
   font-size: 20px;
