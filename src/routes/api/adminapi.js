@@ -53,7 +53,7 @@ router.get('/users', (req, res) => {
     const userSql = `
     SELECT 
       u.id, u.first_name, u.last_name, u.email, u.phone_number, u.user_name, u.is_admin, u.user_refer_id,u.is_confirmation,
-      p.btc_transaction, p.eth_transaction, p.usdt_transaction
+      p.btc_transaction, p.eth_transaction, p.usdt_transaction, p.created_at 
     FROM users u
     LEFT JOIN payment_transaction p ON u.id = p.user_id
   `;
@@ -69,14 +69,14 @@ router.get('/users', (req, res) => {
         const users = results.map(user => {
             let transaction = null;
             if (user.btc_transaction) {
-                transaction = { type: 'btc_transaction', value: user.btc_transaction };
+                transaction = { type: 'btc_transaction', value: user.btc_transaction, created_at: user.created_at };    
             } else if (user.eth_transaction) {
-                transaction = { type: 'eth_transaction', value: user.eth_transaction };
-            } else if (user.usdt_transaction) {
-                transaction = { type: 'usdt_transaction', value: user.usdt_transaction };
+                transaction = { type: 'eth_transaction', value: user.eth_transaction ,created_at: user.created_at};
+            } else if (user.usdt_transaction) {     
+                transaction = { type: 'usdt_transaction', value: user.usdt_transaction ,created_at: user.created_at};
             }
             // Remove raw transaction columns from output
-            const { btc_transaction, eth_transaction, usdt_transaction, ...userData } = user;
+            const { btc_transaction, eth_transaction, usdt_transaction, created_at,...userData } = user;
             return { ...userData, transaction };
         });
 

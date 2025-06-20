@@ -152,12 +152,7 @@
 		<div class="container">
 			<div class="contact-form-action">
 				<div data-aos="fade-up" data-aos-duration="1200" class="section-title">
-					<h2>IF YOU HAVE A SPONSOR</h2>
-					<p class="text-left">If you know the person who referred you to this Site, please provide their
-						Username and as much information about them as you can, so that we can properly honor them and
-						give them credit for your introduction.</p>
-					<p class="text-left text-red"><b>*If you do not have a Sponsor, you can proceed by clicking:
-							“CONTINUE”</b></p>
+					<h3>Just a Few Steps Away — Register Now to Secure Your Spot and Start Earning Rewards!</h3>
 				</div>
 				<!-- ...existing code... -->
 				<form id="registerForm" data-aos="fade-up" data-aos-duration="1600">
@@ -165,31 +160,44 @@
 						<div class="col-12">
 							<div class="form-group">
 								<input class="form-control" id="user_name" type="text" name="user_name"
-									placeholder="Username of Your Referrer" >
+									placeholder="VIRON Username" required>
 								<small id="username-check-message" style="color:red;"></small>
 							</div>
 						</div>
-
-
+						<div class="col-12">
+							<div class="form-group">
+								<input class="form-control" type="password" id="password" name="password"
+									placeholder="Password" required>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="form-group">
+								<input class="form-control" id="first_name" type="text" name="first_name"
+									placeholder="First Name " required>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="form-group">
+								<input class="form-control" id="last_name" type="text" name="last_name"
+									placeholder="Last Name " required>
+							</div>
+						</div>
 						<div class="col-12">
 							<div class="form-group">
 								<input class="form-control" id="email" type="email" name="email"
-									placeholder="Email of Your Referrer" >
-								<small id="email-check-message" style="color:red;"></small>
-
+									placeholder="Email " required>
 							</div>
 						</div>
 						<div class="col-12">
 							<div class="form-group">
-								<input id="phone" class="form-control" type="tel" name="phone" style="width: 100%;"
-									placeholder="Phone Number of Your Referrer" >
-								<small id="phone-check-message" style="color:red;"></small>
+								<input id="phone" class="form-control" type="tel" name="phone"
+									placeholder="Phone Number " required>
 							</div>
 						</div>
-
+						
 						<div class="col-12">
 							<button class="default-btn btn-two" type="submit" id="register-submit-btn">
-								Continue
+								SUBMIT NOW
 							</button>
 						</div>
 					</div>
@@ -374,111 +382,86 @@
 
 			const form = e.target;
 			const fullPhone = iti.getNumber(); // E.g. +919876543210
+			// / Get userReferId from URL query params
+			const urlParams = new URLSearchParams(window.location.search);
+			const userReferId = urlParams.get('userId');
 
-			// const data = {
-			// 	username: form.user_name.value,
-			// 	password: form.password.value,
-			// 	firstName: form.first_name.value,
-			// 	lastName: form.last_name.value,
-			// 	email: form.email.value,
-			// 	phoneNumber: fullPhone
-			// };
+			const data = {
+				username: form.user_name.value,
+				password: form.password.value,
+				firstName: form.first_name.value,
+				lastName: form.last_name.value,
+				email: form.email.value,
+				phoneNumber: fullPhone,
+				userReferId: userReferId, // Assuming the referrer username is used as userReferId
 
-			// Get the sponsor value (username, email, or phone)
-			// Get all sponsor values
-			const username = document.getElementById('user_name').value.trim();
-			const email = document.getElementById('email').value.trim();
-			const phone = document.getElementById('phone').value.trim();
+			};
 
-			let foundUserId = null;
+			try {
+				const response = await fetch('/api/register', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(data)
+				});
 
-			// Helper to check one value
-			async function checkSponsor(value) {
-				if (!value) return null;
-				try {
-					const response = await fetch(`/api/check-username?username=${encodeURIComponent(value)}`);
-					const result = await response.json();
-					if (result.exists && result.userId) return result.userId;
-				} catch (err) {
-					// Ignore error, just try next
+				const result = await response.json();
+				if (response.ok) {
+					// Redirect to confirmation page
+					window.location.href = `registration-confirmation.html?username=${encodeURIComponent(data.username)}&email=${encodeURIComponent(data.email)}&firstName=${encodeURIComponent(data.firstName)}&lastName=${encodeURIComponent(data.lastName)}&password=${encodeURIComponent(data.password)}`;
+				} else {
+					alert(result.message || 'Registration failed.');
 				}
-				return null;
+			} catch (err) {
+				alert('An error occurred.');
 			}
-
-			// Check all three, stop at first found
-			foundUserId = await checkSponsor(username);
-			if (!foundUserId) foundUserId = await checkSponsor(email);
-			if (!foundUserId) foundUserId = await checkSponsor(phone);
-
-			// Redirect accordingly
-			if (foundUserId) {
-				window.location.href = `user-register.html?userId=${encodeURIComponent(foundUserId)}`;
-			} else {
-				window.location.href = `user-register.html`;
-			}
-
-			// try {
-			// 	const response = await fetch('/api/register', {
-			// 		method: 'POST',
-			// 		headers: {
-			// 			'Content-Type': 'application/json'
-			// 		},
-			// 		body: JSON.stringify(data)
-			// 	});
-
-			// 	const result = await response.json();
-			// 	if (response.ok) {
-			// 		// Redirect to confirmation page
-			// 		window.location.href = `registration-confirmation.html?username=${encodeURIComponent(data.username)}&email=${encodeURIComponent(data.email)}&firstName=${encodeURIComponent(data.firstName)}&lastName=${encodeURIComponent(data.lastName)}&password=${encodeURIComponent(data.password)}`;
-			// 	} else {
-			// 		alert(result.message || 'Registration failed.');
-			// 	}
-			// } catch (err) {
-			// 	alert('An error occurred.');
-			// }
 		});
 	</script>
-	<!-- <script>
-		// Username check
+	<script>
 		const usernameInput = document.getElementById('user_name');
 		const usernameMessage = document.getElementById('username-check-message');
-		usernameInput.addEventListener('blur', () => checkAvailability(usernameInput, usernameMessage));
+		const submitBtn = document.getElementById('register-submit-btn');
 
-		// Email check
-		const emailInput = document.getElementById('email');
-		const emailMessage = document.getElementById('email-check-message');
-		emailInput.addEventListener('blur', () => checkAvailability(emailInput, emailMessage));
+		let usernameAvailable = false;
 
-		// Phone check
-		const phoneInput = document.getElementById('phone');
-		const phoneMessage = document.getElementById('phone-check-message');
-		phoneInput.addEventListener('blur', () => checkAvailability(phoneInput, phoneMessage));
+		usernameInput.addEventListener('blur', async () => {
+			const username = usernameInput.value.trim();
 
-		// Generalized check function
-		async function checkAvailability(inputElem, messageElem) {
-			const value = inputElem.value.trim();
-			if (!value) {
-				messageElem.textContent = '';
+			// Clear message if input is empty
+			if (!username) {
+				usernameMessage.textContent = '';
+				submitBtn.disabled = true;
+				usernameAvailable = false;
 				return;
 			}
+
 			try {
-				const response = await fetch(`/api/check-username?username=${encodeURIComponent(value)}`);
+				const response = await fetch(`/api/check-username?username=${encodeURIComponent(username)}`);
 				const result = await response.json();
+
 				if (!response.ok) {
-					messageElem.textContent = 'Error checking. Try again later.';
-					messageElem.style.color = 'red';
-				} else if (result.exists) {
-					messageElem.textContent = 'Sponsor is Available. Please Continue with Registration.';
-					messageElem.style.color = 'green';
+					usernameMessage.textContent = 'Error checking username. Try again later.';
+					submitBtn.disabled = true;
+					usernameAvailable = false;
+				} else if (!result.exists) {
+					usernameMessage.textContent = 'Username is Available.';
+					usernameMessage.style.color = 'green';
+					submitBtn.disabled = false;
+					usernameAvailable = true;
 				} else {
-					messageElem.textContent = 'Sponsor is not available.';
-					messageElem.style.color = 'red';
+					usernameMessage.textContent = 'Username is not available.';
+					usernameMessage.style.color = 'red';
+					submitBtn.disabled = true;
+					usernameAvailable = false;
 				}
 			} catch (error) {
-				messageElem.textContent = 'Error checking. Try again later.';
-				messageElem.style.color = 'red';
+				usernameMessage.textContent = 'Error checking username. Try again later.';
+				submitBtn.disabled = true;
+				usernameAvailable = false;
 			}
-		}
+		});
+
 		// Prevent form submission if username is not available
 		document.getElementById('registerForm').addEventListener('submit', function (e) {
 			if (!usernameAvailable) {
@@ -486,7 +469,7 @@
 				alert('Please choose an available username before submitting.');
 			}
 		});
-	</script> -->
+	</script>
 
 
 

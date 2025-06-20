@@ -24,7 +24,7 @@ router.post('/register', (req, res) => {
     phoneNumber,
     username,
     isAdmin = 0,
-    userReferId = null,
+    userReferId = null, // Default to null if not provided
     isConfirmation=0
   } = req.body;
 
@@ -189,33 +189,188 @@ router.post('/set-password', (req, res) => {
   });
 });
 
-// POST /api/payment
+// sgMail.setApiKey(process.env.SENDGRID_API_KEY); // Ensure this is set
+
 router.post('/payment', normalUser, (req, res) => {
   const { user_id, btc_txn, eth_txn, usdt_txn } = req.body;
 
-  // Check if payment already exists for this user
+  // 1. Get user info
   db.query(
-    'SELECT id FROM payment_transaction WHERE user_id = ?',
+    'SELECT id, email, first_name, last_name FROM users WHERE id = ?',
     [user_id],
-    (err, results) => {
+    (err, userResults) => {
       if (err) return res.status(500).json({ message: 'Database error', error: err });
+      if (userResults.length === 0) return res.status(404).json({ message: 'User not found' });
 
-      if (results.length > 0) {
-        return res.status(409).json({ message: 'Payment already done, contact admin.' });
-      }
+      const user = userResults[0];
+      const { email, first_name, last_name } = user;
 
-      // If not, insert the payment
+      // 2. Check if payment already exists
       db.query(
-        'INSERT INTO payment_transaction (user_id, btc_transaction, eth_transaction, usdt_transaction) VALUES (?, ?, ?, ?)',
-        [user_id, btc_txn, eth_txn, usdt_txn],
-        (err2) => {
-          if (err2) return res.status(500).json({ message: 'Error saving payment', error: err2 });
-          res.status(200).json({ message: 'Payment saved successfully' });
+        'SELECT id FROM payment_transaction WHERE user_id = ?',
+        [user_id],
+        (err2, paymentResults) => {
+          if (err2) return res.status(500).json({ message: 'Database error', error: err2 });
+          if (paymentResults.length > 0) {
+            return res.status(409).json({ message: 'Payment already submitted. Contact admin if needed.' });
+          }
+
+          // 3. Insert new payment record
+          db.query(
+            'INSERT INTO payment_transaction (user_id, btc_transaction, eth_transaction, usdt_transaction) VALUES (?, ?, ?, ?)',
+            [user_id, btc_txn, eth_txn, usdt_txn],
+            (err3) => {
+              if (err3) return res.status(500).json({ message: 'Error saving payment', error: err3 });
+
+              // 4. Send email using SendGrid
+              const msg = {
+                to: email,
+                from: 'admin@viron.network',
+                subject: `${first_name} ${last_name}, Your Payment is Processing.`,
+                html: `<!DOCTYPE html>
+<html>
+  <body style="font-family: Arial, sans-serif; color: #333; line-height: 1.6; max-width: 700px; margin: auto; padding: 2rem; background: #f9f9f9;">
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <img src="http://viron.network:4000/assets/viron-logo.svg" alt="Viron Logo" style="max-width: 180px;" />
+    </div>
+
+    <h2 style="color: #b30000; text-align: center;">IMPORTANT NOTIFICATION</h2>
+    <h3 style="text-align: center;">Your Payment is Processing.</h3>
+
+    <p>Hello <strong>${first_name} ${last_name}</strong>,</p>
+
+    <p>Your cryptocurrency payment for your <strong>VIRON Home-Business (“VHB”)</strong> is being processed and is awaiting confirmation on the Blockchain. The VIRON Administrators have been notified.</p>
+
+    <p>Once your payment is confirmed and cleared, your VHB account status will be marked <strong>“PAID”</strong>. The VIRON Administrators will then correctly set up your account with the qualified third-party MLM company, which will complete your VHB.</p>
+
+    <p>We will be in touch at each step, and you will be notified accordingly.</p>
+
+    <p>If you have any questions or need help, the best way to contact VIRON Member Support is via our <a href="https://viron.network/contact" style="color: #007bff;">CONTACT US</a> page or via Email: <a href="mailto:support@viron.network" style="color: #007bff;">Support@VIRON.NETWORK</a>.</p>
+
+    <p><strong>Welcome to the Evolution of Network Marketing!</strong></p>
+
+    <p style="text-align: center;">
+      <a href="https://viron.network/login" style="background: #dc3545; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">LOGIN TO VIRON.NETWORK</a>
+    </p>
+
+    <p style="text-align: left; margin-top: 40px;">- The VIRON Administration</p>
+  </body>
+</html>`
+              };
+
+              sgMail
+                .send(msg)
+                .then(() => {
+                  return res.status(201).json({ message: 'Payment saved successfully. Email sent.' });
+                })
+                .catch(error => {
+                  return res.status(201).json({
+                    message: 'Payment saved successfully, but email failed to send.',
+                    error: error.message,
+                  });
+                });
+            }
+          );
         }
       );
     }
   );
 });
+
+
+// POST /api/payment
+// router.post('/payment', normalUser, (req, res) => {
+//   const { user_id, btc_txn, eth_txn, usdt_txn } = req.body;
+
+//   db.query(
+//     'SELECT id, email,first_name,last_name, FROM users WHERE id = ?',
+//     [user_id],
+//     (err, results) => {
+//       if (err) return res.status(500).json({ message: 'Database error', error: err });
+//       if (results.length === 0) return res.status(404).json({ message: 'User not found' });
+
+//       const user = results[0];
+//       const email = user.email;
+//       const firstName = user.first_name;
+//       const lastName = user.last_name;
+//       console.log("user is :", user)
+//       console.log("email is :", email)
+//       console.log("firstName is :", firstName)
+//       console.log("lastName is :", lastName)
+
+  
+//     }
+//   );
+
+//   // Check if payment already exists for this user
+//   db.query(
+//     'SELECT id FROM payment_transaction WHERE user_id = ?',
+//     [user_id],
+//     (err, results) => {
+//       if (err) return res.status(500).json({ message: 'Database error', error: err });
+
+//       if (results.length > 0) {
+//         return res.status(409).json({ message: 'Payment already done, contact admin.' });
+//       }
+
+//       // If not, insert the payment
+//       db.query(
+//         'INSERT INTO payment_transaction (user_id, btc_transaction, eth_transaction, usdt_transaction) VALUES (?, ?, ?, ?)',
+//         [user_id, btc_txn, eth_txn, usdt_txn],
+//         (err2) => {
+//           if (err2) return res.status(500).json({ message: 'Error saving payment', error: err2 });
+//                   const msg = {
+//           to: email,
+//           from: "admin@viron.network",
+//           subject: `${firstName} ${lastName} - Set Your Password`,
+//           html: `<!DOCTYPE html>
+// <html>
+//   <body style="font-family: Arial, sans-serif; color: #333; line-height: 1.6; max-width: 700px; margin: auto; padding: 2rem; background: #f9f9f9;">
+//     <div style="text-align: center; margin-bottom: 2rem;">
+//       <img src="http://viron.network:4000/assets/viron-logo.svg" alt="Viron Logo" style="max-width: 180px;" />
+//     </div>
+
+//     <h2 style="color: #b30000; text-align: center;">IMPORTANT NOTIFICATION</h2>
+//     <h3 style="text-align: center;">Your Payment is Processing.</h3>
+
+//     <p>Hello <strong>${firstName} ${lastName} </strong>,</p>
+
+//     <p>Your cryptocurrency payment for your <strong>VIRON Home-Business (“VHB”)</strong> is being processed and is awaiting confirmation on the Blockchain. The VIRON Administrators have been notified.</p>
+
+//     <p>Once your payment is confirmed and cleared, your VHB account status will be marked <strong>“PAID”</strong>. The VIRON Administrators will then correctly set up your account with the qualified third-party MLM company, which will complete your VHB.</p>
+
+//     <p>We will be in touch at each step, and you will be notified accordingly.</p>
+
+//     <p>If you have any questions or need help, the best way to contact VIRON Member Support is via our <a href="https://viron.network/contact" style="color: #007bff;">CONTACT US</a> page or via Email: <a href="mailto:support@viron.network" style="color: #007bff;">Support@VIRON.NETWORK</a>.</p>
+
+//     <p><strong>Welcome to the Evolution of Network Marketing!</strong></p>
+
+//     <p style="text-align: center;">
+//       <a href="https://viron.network/login" style="background: #dc3545; color: white; padding: 12px 24px; text-decoration: none; text-align: center;; border-radius: 6px; display: inline-block;">LOGIN TO VIRON.NETWORK</a>
+//     </p>
+
+//     <p style="text-align: left;; margin-top: 40px;">- The VIRON Administration</p>
+//   </body>
+// </html>
+
+
+// `,
+//         };
+
+//         sgMail.send(msg)
+//           .then(() => res.status(201).json({ message: 'User registered. Set password link sent!' }))
+//           .catch((error) => res.status(201).json({
+//             message: 'User registered, but email failed to send',
+//             error: error.message
+//           }));
+//           res.status(200).json({ message: 'Payment saved successfully' });
+
+
+//         }
+//       );
+//     }
+//   );
+// });
 
 
 router.get('/users', adminOnly, (req, res) => {
@@ -288,16 +443,35 @@ router.put('/users/:id', (req, res) => {
 
 
 // Check if username exists API
-router.get('/check-username',(req, res) => {
+router.get('/check-username', (req, res) => {
   const { username } = req.query;
   if (!username) {
     return res.status(400).json({ message: 'Username is required' });
   }
 
-  db.query('SELECT id FROM users WHERE user_name = ?', [username], (err, results) => {
+  // Check if input is email
+  const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(username);
+  // Check if input is phone number (basic check, adjust regex as needed)
+  const isPhone = /^\+?\d{10,15}$/.test(username);
+
+  let query = '';
+  let params = [];
+
+  if (isEmail) {
+    query = 'SELECT id FROM users WHERE email = ?';
+    params = [username];
+  } else if (isPhone) {
+    query = 'SELECT id FROM users WHERE phone_number = ?';
+    params = [username];
+  } else {
+    query = 'SELECT id FROM users WHERE user_name = ?';
+    params = [username];
+  }
+
+  db.query(query, params, (err, results) => {
     if (err) return res.status(500).json({ message: 'Database error', error: err });
-    // If results.length === 0, username does not exist (valid for new registration)
-    res.json({ exists: results.length > 0 });
+    if (results.length === 0) return res.json({ exists: false });
+    res.json({ exists: true, userId: results[0].id });
   });
 });
 // Update own user info (normal user)
@@ -415,6 +589,29 @@ router.put('/update-password', (req, res) => {
     );
   });
 });
+
+// Get user creation timestamp by username
+router.get('/user-created-at', (req, res) => {
+  const { username } = req.query;
+  if (!username) {
+    return res.status(400).json({ message: 'Username is required' });
+  }
+
+  db.query(
+    'SELECT created_at FROM users WHERE user_name = ?',
+    [username],
+    (err, results) => {
+      if (err) return res.status(500).json({ message: 'Database error', error: err });
+      if (results.length === 0) return res.status(404).json({ message: 'User not found' });
+      // Return username and creation timestamp
+      console.log("results are :", results)
+      console.log("username is :", username)
+      console.log("created_at is :", results[0].created_at)
+      res.json({ username, createdAt: results[0].created_at });
+    }
+  );
+});
+
 
 
 // ...existing code...
