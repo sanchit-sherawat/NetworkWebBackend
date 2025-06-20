@@ -81,7 +81,7 @@ router.post('/register', (req, res) => {
     <tr>
       <td style="padding: 30px; text-align: center;">
         <div style="border: 4px solid #D00000; padding: 30px;">
-        <h2 style="color: #D00000">IMPORTANT NOTICE:</h2>
+        <h2 style="color: #D00000; margin-bottom: 5px;">IMPORTANT NOTICE:</h2>
         <p>To finalize your <strong><u>VIRON Home-Business (&ldquo;VHB&rdquo;)</u></strong>, please log-in to your<br />back-office now to complete the critical instructions that are displayed there.</p>
         <p>To log in to your VIRON.NETWORK account, use the Username and Password you&rsquo;ve just provided during your Registration, which is as follows:</p>
         <p><strong>Username:</strong> ${username}<br>
@@ -95,7 +95,7 @@ router.post('/register', (req, res) => {
       <td style="padding: 30px;">
         <p style="text-align: center;"><strong>FOR YOUR CONVENIENCE</strong></p>
         <ul>
-          <li>All Sales and Purchases are subject to the VIRON <strong>Terms of Use</strong> as described at: <a href="https://www.VIRON.NETWORK.Network/TermsOfUse.pdf">https://www.VIRON.NETWORK.Network/TermsOfUse.pdf</a> and governs the VIRON.NETWORK website and its members. It is located at the bottom of every web page on the VIRON.NETWORK website. Further, all Members, including you, acknowledge and agree to it every time you log in. So please review it entirely.</li>
+          <li style="margin-bottom: 20px;">All Sales and Purchases are subject to the VIRON <strong>Terms of Use</strong> as described at: <a href="https://www.VIRON.NETWORK.Network/TermsOfUse.pdf">https://www.VIRON.NETWORK.Network/TermsOfUse.pdf</a> and governs the VIRON.NETWORK website and its members. It is located at the bottom of every web page on the VIRON.NETWORK website. Further, all Members, including you, acknowledge and agree to it every time you log in. So please review it entirely.</li>
           <li><strong>Important:</strong> Although VIRON will professionally handle all major work for you, it is essential that you understand it is <u>your</u> We advise that you familiarize yourself with all aspects of your VIRON business. We recommend that you visit all pages of the website and review all areas of your Back-Office to become familiar with and fully understand VIRON&rsquo;s game-changing capabilities.</li>
         </ul>
           <p><a href="http://148.113.201.173:4000/#/login" style="display: inline-block; padding: 12px 24px; background-color: #D00000; color: #ffffff; text-decoration: none; border-radius: 4px;">LOGIN TO VIRON.NETWORK</a></p>
