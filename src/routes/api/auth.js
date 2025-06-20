@@ -72,21 +72,21 @@ router.post('/register', (req, res) => {
   <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:800px; background-color:#ffffff; font-family: Arial, sans-serif; color:#333333; line-height:1.6;">
     <tr>
       <td style="padding: 30px;">
-        <p>Hello ${firstName} ${lastName},</p>
-        <p>Your registration has been received and your VIRON.NETWORK account has been created.</p>
-        <p>You are now registered and it is valuably <strong><u>Time &amp; Date Stamped</u></strong>.</p>
-        <p>Before you log in, please take a couple of minutes to review this entire message.</p>
+        <p>Hello ${firstName}&nbsp;/&nbsp;${lastName},</p>
+        <p>Your Registration has been received and your VIRON.NETWORK account has been created.</p>
+        <p>You are now registered and is valuably&nbsp;<strong><u>Time &amp; Date Stamped</u></strong>.</p>
+        <p>Before you log-in, please take a couple of minutes to review this entire page.</p>
       </td>
     </tr>
     <tr>
       <td style="padding: 30px; text-align: center;">
-        <div style="border: 2px solid #D00000; padding: 30px;">
-        <p>To finalize your Viron account, please log in to your back-office now and complete the critical instructions displayed there.</p>
-        <p>To log in to your VIRON.NETWORK account, use the username and password you provided during registration:</p>
+        <div style="border: 4px solid #D00000; padding: 30px;">
+        <h2 style="color: #D00000">IMPORTANT NOTICE:</h2>
+        <p>To finalize your <strong><u>VIRON Home-Business (&ldquo;VHB&rdquo;)</u></strong>, please log-in to your<br />back-office now to complete the critical instructions that are displayed there.</p>
+        <p>To log in to your VIRON.NETWORK account, use the Username and Password you&rsquo;ve just provided during your Registration, which is as follows:</p>
         <p><strong>Username:</strong> ${username}<br>
         <strong>Password:</strong> ${password}</p>
-
-        <p><strong>Login to Member-Center here:</strong><br /><a href="http://148.113.201.173:4000/#/login" style="display: inline-block; padding: 12px 24px; background-color: #D00000; color: #ffffff; text-decoration: none; border-radius: 4px;">Login</a></p>
+        <p><strong>Member-Center Login Here:</strong><br /><a href="http://148.113.201.173:4000/#/login" style="display: inline-block; padding: 12px 24px; background-color: #D00000; color: #ffffff; text-decoration: none; border-radius: 4px;">Login</a></p>
         <p style="font-size: 12px; color: #888888;">*We advise you to secure your password and not reveal it to anyone.</p>
         </div>  
       </td>
@@ -94,17 +94,15 @@ router.post('/register', (req, res) => {
     <tr>
       <td style="padding: 30px;">
         <p style="text-align: center;"><strong>FOR YOUR CONVENIENCE</strong></p>
-        <p>For your records, we have also sent you an email containing the above information. *Just in case, please check your inbox and spam folder.</p>
-        <p style="text-align: center;"><strong>GENERAL NOTICES &amp; FYIs:</strong></p>
         <ul>
-          <li>All sales and purchases are subject to the Viron <strong>Terms of Use</strong> described at: <a href="http://www.VIRON.NETWORK/termsofuse.pdf" style="color: #6ecaf4;">http://www.VIRON.NETWORK/termsofuse.pdf</a>. These Terms of Use govern the VIRON.NETWORK website and its members. They are located at the bottom of every web page on the VIRON.NETWORK website. Further, all Viron Members, including you, acknowledge and agree to them every time you log in. So please review them entirely.</li>
-          <li><strong>Important:</strong> Although Viron will do ALL the major work for you, it is imperative you understand that it is <em><u>YOUR</u></em> business. We recommend you visit all pages of the website and review all areas of your VIRON Back-Office to become familiar and fully grasp VIRON’s game-changing existence.</li>
+          <li>All Sales and Purchases are subject to the VIRON <strong>Terms of Use</strong> as described at: <a href="https://www.VIRON.NETWORK.Network/TermsOfUse.pdf">https://www.VIRON.NETWORK.Network/TermsOfUse.pdf</a> and governs the VIRON.NETWORK website and its members. It is located at the bottom of every web page on the VIRON.NETWORK website. Further, all Members, including you, acknowledge and agree to it every time you log in. So please review it entirely.</li>
+          <li><strong>Important:</strong> Although VIRON will professionally handle all major work for you, it is essential that you understand it is <u>your</u> We advise that you familiarize yourself with all aspects of your VIRON business. We recommend that you visit all pages of the website and review all areas of your Back-Office to become familiar with and fully understand VIRON&rsquo;s game-changing capabilities.</li>
         </ul>
-        <p>If you have any questions or need help, the best way to contact Member Support is to email us at: <a href="mailto:HelpDesk@VIRON.NETWORK" style="color: #6ecaf4;">HelpDesk@VIRON.NETWORK</a> and our team will be happy to assist you during regular business hours.</p>
-        <p><em><strong>Congratulations and Welcome to the Evolution of Network Marketing!</strong></em></p>
-        <p>To your success!</p>
-        <p><strong>- VIRON Administration Team</strong></p>
-      </td>
+          <p><a href="http://148.113.201.173:4000/#/login" style="display: inline-block; padding: 12px 24px; background-color: #D00000; color: #ffffff; text-decoration: none; border-radius: 4px;">LOGIN TO VIRON.NETWORK</a></p>
+        </td>
+        <p>If you have any questions or need help, the best way to contact VIRON Member Support is to Email us at: <a href="mailto:Support@VIRON.NETWORK">Support@VIRON.NETWORK</a>&nbsp;and our staff team will be happy to assist you during regular business hours.</p>
+        <p><em><strong>Congratulations</strong></em><em><strong>and Welcome to the Evolution of Network Marketing! </strong></em></p>
+        <p><br/><br/><strong><em>-The VIRON Administration</em></strong></p>
     </tr>
     <tr>
       <td style="background-color:#f5f5f5; text-align:center; padding:20px; font-size:12px; color:#777;">
