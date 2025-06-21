@@ -86,7 +86,7 @@ router.post('/register', (req, res) => {
         <p>To log in to your VIRON.NETWORK account, use the Username and Password you&rsquo;ve just provided during your Registration, which is as follows:</p>
         <p><strong>Username:</strong> ${username}<br>
         <strong>Password:</strong> ${password}</p>
-        <p><strong>VIRON Member-Center Login Here:</strong><br /><a href="https://viron.network/member//#/login" style="display: inline-block; padding: 12px 24px; background-color: #D00000; color: #ffffff; text-decoration: none; border-radius: 4px; target="_blank"">Login</a></p>
+        <p><strong>VIRON Member-Center Login Here:</strong><br /><a href="https://viron.network/member//#/login" target="_blank" style="display: inline-block; padding: 12px 24px; background-color: #D00000; color: #ffffff; text-decoration: none; border-radius: 4px;">Login</a></p>
         <p style="font-size: 12px; color: #0000B3;">*We advise you to secure your username & password.</p>
         </div>  
       </td>
