@@ -34,7 +34,7 @@ body {
 
 /*========================== Start custom CSS ============================*/
 .text-red{
-  color: var(--redColor)
+  color: var(--redColor)!important;
 }
 
 .text-dark-red{
