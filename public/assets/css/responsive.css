@@ -1045,7 +1045,8 @@
 @media only screen and (max-width: 991px) {
   .mean-container .mean-bar {
     background-color:var(--whiteColor);
-    height: 103px;
+    height: 130px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   }
   .mean-container a.meanmenu-reveal {
     padding: 34px 15px 0 0;
@@ -1060,7 +1061,7 @@
   }
   .mobile-nav .logo {
     max-width: 140px;
-    top: 3px;
+    top: 15px;
   }
   .mobile-nav.mean-container .mean-nav {
     margin-top: 95px;
