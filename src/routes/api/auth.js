@@ -226,7 +226,7 @@ router.post('/payment', normalUser, (req, res) => {
               const msg = {
                 to: email,
                 from: 'admin@viron.network',
-                subject: `${first_name} ${last_name}, Your Payment is Processing – VIRON.NETWORK`,
+                subject: `${first_name}  Your Payment is Processing – VIRON.NETWORK`,
                 html: `<!DOCTYPE html>
 <html>
   <body style="font-family: Arial, sans-serif; color: #333; line-height: 1.6; max-width: 700px; margin: auto; padding: 2rem; background: #f9f9f9;">
@@ -235,28 +235,28 @@ router.post('/payment', normalUser, (req, res) => {
     </div>
     <h2 style="color: #D00000; text-align: center; margin-bottom:0px;">IMPORTANT NOTIFICATION</h2>
     <h3 style="text-align: center; margin-top:10px"><strong>Your Payment is Processing.</strong></h3>
-    <p>Hello <strong>${first_name} ${last_name}</strong>,</p>
-    <p>Your cryptocurrency payment for your <strong><u>VIRON Home-Business (&ldquo;VHB&rdquo;)</u> </strong>is being processed and is awaiting confirmation on the Blockchain.<strong style="color: #D00000;"> The VIRON Administrators have been notified. </strong>Once your payment is confirmed and cleared, your VHB account status will be marked &ldquo;PAID&rdquo;.</p>
+    <p>Hello <strong>${first_name} / ${last_name}</strong>,</p>
+       <p>Your cryptocurrency payment for your <strong><u>VIRON Home-Business (&ldquo;VHB&rdquo;)</u> </strong>is being processed and is awaiting confirmation on the Blockchain.<strong style="color: #D00000;"> The VIRON Administrators have been notified. </strong>Once your payment is confirmed and cleared, your VHB account status will be marked &ldquo;PAID&rdquo;.</p>
     <p>The VIRON Administrators will then correctly set up your account with the qualified <strong>third-party MLM company</strong>, which will complete your VHB.</p>
     <p>We will be in touch with you at each step, and you will be notified accordingly.</p>
     <p><strong style="color: #D00000;">EMPHASIS:</strong> Please understand that we are currently in <strong><u>PRE-LAUNCH</u></strong>. The Pre-Launch will conclude when we reach 5,500 total members. We will then automatically enter <strong>FULL-LAUNCH</strong>.</p>
     <p><strong style="color: #D00000;">STRONG EMPHASIS:</strong> Your VIRON position is currently <u>secure and locked per your Time/Date Stamp</u>. Until the Pre-Launch is over, your funds are placed in our ESCROW account. <span style="background-color: yellow;">Your funds are only drawn when the following steps are completed:</span></p>
     <ol style="list-style: none; margin: 0; padding: 0;">
-      <li style="margin: 0; padding: 0 0 0 2em; position: relative;"><span style="position: absolute; left: 0; color: #D00000; font-weight: bold;">(i.)</span>You are correctly placed with the third-party MLM company: <strong>SAVE CLUB (&ldquo;<u style="color: #0000B3;">SC</u>&rdquo;)</strong>.</li>
-      <li style="margin: 0; padding: 0 0 0 2em; position: relative;"><span style="position: absolute; left: 0; color: #D00000; font-weight: bold;">(ii.)</span>Your <strong>VIRON DRs</strong> purchased are placed into your <strong><u style="color: #0000B3;">SC</u></strong></li>
+      <li style="margin: 0; padding: 0 0 0 2em; position: relative;"><span style="position: absolute; left: 0; right:20px; color: #D00000; font-weight: bold;">(i.)</span>You are correctly placed with the third-party MLM company: <strong>SAVE CLUB (&ldquo;<u style="color: #0000B3;">SC</u>&rdquo;)</strong>.</li>
+      <li style="margin: 0; padding: 0 0 0 2em; position: relative;"><span style="position: absolute; left: 0; right:20px; color: #D00000; font-weight: bold;">(ii.)</span>Your <strong>VIRON DRs</strong> purchased are placed into your <strong><u style="color: #0000B3;">SC</u></strong></li>
     </ol>
     <p><strong style="color: #D00000;">*Please be advised that VIRON continues to invest ongoing professional efforts and resources even before the completion of the above steps for you. <u>Please exercise patience during our Pre-Launch</u>. </strong>We will be with you every step of the way.</p>
-    <p style="color: #0000B3; text-align:center"><strong>VIRON TELEGRAM CHANNEL:</strong></p>
+    <p style="color: #0000B3; text-align:center; margin-bottom:5px; padding-bottom:0px;"><strong>VIRON TELEGRAM CHANNEL:</strong></p>
     <p>For up-to-the-minute information and company updates, we highly suggest you join VIRON&rsquo;s <strong>Telegram Channel</strong>: <a href="https://t.me/VIRON_NETWORK" style="color: #0000B3;">https://t.me/VIRON_NETWORK</a></p>
     <hr/>
-      <p style="color: #0000B3; text-align:center"><strong>VIRON MEMBER SUPPORT:</strong></p>
+      <p style="color: #0000B3; text-align:center; margin-bottom:5px; padding-bottom:0px;"><strong>VIRON MEMBER SUPPORT:</strong></p>
       <p>If you have any questions or need help, the best way to contact VIRON Member Support is via our CONTACT US page or via Email: <a href="mailto:Support@VIRON.NETWORK" style="color: #0000B3;">Support@VIRON.NETWORK</a>. Our staff team will be happy to assist you during regular business hours.</p>
     <hr/>
       <p style="color: #0000B3;"><strong><u>JUST IN CASE YOU CANNOT GET BACK TO THIS PAGE</u></strong>, our system has also sent you an Email notification containing the same information that is on this page. *When checking your email, please don&rsquo;t forget to check your spam folder as well.</p>
     <hr/>
     <p style="text-align:center"><strong><em>Welcome to the Evolution of Network Marketing!</em></strong></p>
-    <a href="http://localhost:3000/member/loginPage" target='_blank' rel='noopener noreferrer' style="background: #D00000; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">LOGIN to VIRON.NETWORK</a>
-    <p style="text-align:center"><strong><em>-The VIRON Administration</em></strong></p>
+    <p style="text-align:center"><a href="https://viron.network/member//#/loginPage" target='_blank' rel='noopener noreferrer' style="background: #D00000; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">LOGIN to VIRON.NETWORK</a></p>
+    <p style="text-align:center"><strong><em>-The VIRON Administration</em></strong></p>ß
   </body>
 </html>`
               };
@@ -481,30 +481,30 @@ router.get('/check-username', (req, res) => {
 // Update own user info (normal user)
 router.put('/profile', normalUser, (req, res) => {
   const userId = req.user.userId; // from JWT
-  const { firstName, lastName, email, phonenumber, username } = req.body;
+  const { firstName, lastName, email, phoneNumber, userName } = req.body;
 
   const fields = [];
   const values = [];
 
-  if (firstName !== "" && firstName !== undefined) {
+  if (firstName !== undefined) {
     fields.push('first_name = ?');
     values.push(firstName);
   }
-  if (lastName !== "" && lastName !== undefined) {
+  if (lastName !== undefined) {
     fields.push('last_name = ?');
     values.push(lastName);
   }
-  if (email !== "" && email !== undefined) {
+  if (email !== undefined) {
     fields.push('email = ?');
     values.push(email);
   }
-  if (phonenumber !== "" && phonenumber !== undefined) {
+  if (phoneNumber !== undefined) {
     fields.push('phone_number = ?');
-    values.push(phonenumber);
+    values.push(phoneNumber);
   }
-  if (username !== "" && username !== undefined) {
+  if (userName !== undefined) {
     fields.push('user_name = ?');
-    values.push(username);
+    values.push(userName);
   }
 
   // Nothing to update
@@ -514,12 +514,7 @@ router.put('/profile', normalUser, (req, res) => {
 
   values.push(userId); // add userId for WHERE clause
 
-
-
   const sql = `UPDATE users SET ${fields.join(', ')} WHERE id = ?`;
-
-  console.log("sql query is :", sql)
-  console.log("values are :", values)
 
   db.query(sql, values, (err, result) => {
     if (err) return res.status(500).json({ message: 'Database error', error: err });
@@ -614,6 +609,30 @@ router.get('/user-created-at', (req, res) => {
     }
   );
 });
+
+
+router.delete("/user/:id", adminOnly,(req, res)=>{
+
+  const userId = req.params.id;
+
+
+  
+  db.query(
+    'DELETE FROM users WHERE id=?',
+    [userId],
+    (err, result)=>{
+      if(err)return res.status(500).json({ message: 'Database error', error: err });
+      if (results.length === 0) return res.status(404).json({ message: 'User not found' });
+      res.json({message:'Your user has been deleted'})
+
+    }
+
+  )
+
+
+
+
+})
 
 
 
