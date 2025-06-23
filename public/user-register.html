@@ -184,8 +184,8 @@
 						</div>
 						<div class="col-12">
 							<div class="form-group">
-								<input class="form-control" id="email" type="email" name="email"
-									placeholder="Email " required>
+								<input class="form-control" id="email" type="email" name="email" placeholder="Email "
+									required>
 							</div>
 						</div>
 						<div class="col-12">
@@ -202,14 +202,14 @@
 						</div>
 						<div class="col-4">
 							<div class="form-group">
-								<input id="state" class="form-control" type="text" name="state"
-									placeholder="State" required>
+								<input id="state" class="form-control" type="text" name="state" placeholder="State"
+									required>
 							</div>
 						</div>
 						<div class="col-4">
 							<div class="form-group">
-								<input id="city" class="form-control" type="text" name="city"
-									placeholder="City" required>
+								<input id="city" class="form-control" type="text" name="city" placeholder="City"
+									required>
 							</div>
 						</div>
 						<div class="col-6">
@@ -422,9 +422,14 @@
 				lastName: form.last_name.value,
 				email: form.email.value,
 				phoneNumber: fullPhone,
-				userReferId: userReferId, // Assuming the referrer username is used as userReferId
-
+				userReferId: userReferId,
+				country: form.country.value,
+				state: form.state.value,
+				city: form.city.value,
+				province: form.province.value,
+				zip: form.zip_code.value
 			};
+
 
 			try {
 				const response = await fetch('/api/register', {

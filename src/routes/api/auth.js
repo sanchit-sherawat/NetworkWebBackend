@@ -24,9 +24,15 @@ router.post('/register', (req, res) => {
     phoneNumber,
     username,
     isAdmin = 0,
-    userReferId = null, // Default to null if not provided
-    isConfirmation=0
+    userReferId = null,
+    isConfirmation = 0,
+    country,
+    state,
+    city,
+    province,
+    zip
   } = req.body;
+
 
   if (!firstName || !lastName || !email || !phoneNumber) {
     return res.status(400).json({ message: 'First name, last name, email and phone number are required' });
@@ -46,17 +52,35 @@ router.post('/register', (req, res) => {
 
     // Insert user with optional fields
     const insertQuery = `
-      INSERT INTO users (
-        first_name, last_name, email, phone_number, user_name, is_admin, user_refer_id, password, is_confirmation
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `;
+  INSERT INTO users (
+    first_name, last_name, email, phone_number, user_name, is_admin, user_refer_id, password, is_confirmation,
+    country, state, city, province, zip
+  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+`;
+
 
     db.query(
       insertQuery,
-      [firstName, lastName, email, phoneNumber, username , isAdmin, userReferId, password,isConfirmation],
+      [
+        firstName,
+        lastName,
+        email,
+        phoneNumber,
+        username,
+        isAdmin,
+        userReferId,
+        password,
+        isConfirmation,
+        country,
+        state,
+        city,
+        province,
+        zip
+      ],
       (err2, result) => {
         if (err2) return res.status(500).json({ message: 'Error inserting user', error: err2 });
-        
+
+
         console.log("database me dal deya gya hai ")
         const msg = {
           to: email,
@@ -123,7 +147,7 @@ router.post('/register', (req, res) => {
           }));
       }
 
-      
+
 
 
 
@@ -301,7 +325,7 @@ router.post('/payment', normalUser, (req, res) => {
 //       console.log("firstName is :", firstName)
 //       console.log("lastName is :", lastName)
 
-  
+
 //     }
 //   );
 
@@ -422,11 +446,18 @@ router.get('/users', adminOnly, (req, res) => {
 // Get user by ID
 router.get('/users/:id', (req, res) => {
   const userId = req.params.id;
-  db.query('SELECT id, first_name, last_name, email, phone_number, user_name, is_admin, user_refer_id FROM users WHERE id = ?', [userId], (err, results) => {
-    if (err) return res.status(500).json({ message: 'Database error', error: err });
-    if (results.length === 0) return res.status(404).json({ message: 'User not found' });
-    res.json(results[0]);
-  });
+  db.query(
+    `SELECT 
+      id, first_name, last_name, email, phone_number, user_name, is_admin, user_refer_id,
+      country, state, city, province, zip, dob, homestatus, employmentstatus, householdincome, petstatus, feedback, created_at
+    FROM users WHERE id = ?`,
+    [userId],
+    (err, results) => {
+      if (err) return res.status(500).json({ message: 'Database error', error: err });
+      if (results.length === 0) return res.status(404).json({ message: 'User not found' });
+      res.json(results[0]);
+    }
+  );
 });
 
 // Update user by ID
@@ -481,7 +512,24 @@ router.get('/check-username', (req, res) => {
 // Update own user info (normal user)
 router.put('/profile', normalUser, (req, res) => {
   const userId = req.user.userId; // from JWT
-  const { firstName, lastName, email, phoneNumber, userName } = req.body;
+  const {
+    firstName,
+    lastName,
+    email,
+    phoneNumber,
+    userName,
+    country,
+    state,
+    city,
+    province,
+    zip,
+    dob,
+    homeStatus,
+    employmentStatus,
+    householdIncome,
+    petStatus,
+    fedback
+  } = req.body;
 
   const fields = [];
   const values = [];
@@ -507,12 +555,57 @@ router.put('/profile', normalUser, (req, res) => {
     values.push(userName);
   }
 
-  // Nothing to update
+  // New fields
+  if (country !== undefined) {
+    fields.push('country = ?');
+    values.push(country);
+  }
+  if (state !== undefined) {
+    fields.push('state = ?');
+    values.push(state);
+  }
+  if (city !== undefined) {
+    fields.push('city = ?');
+    values.push(city);
+  }
+  if (province !== undefined) {
+    fields.push('province = ?');
+    values.push(province);
+  }
+  if (zip !== undefined) {
+    fields.push('zip = ?');
+    values.push(zip);
+  }
+  if (dob !== undefined && dob !== '') {
+  fields.push('dob = ?');
+  values.push(dob);
+}
+  if (homeStatus !== undefined) {
+    fields.push('homestatus = ?');
+    values.push(homeStatus);
+  }
+  if (employmentStatus !== undefined) {
+    fields.push('employmentstatus = ?');
+    values.push(employmentStatus);
+  }
+  if (householdIncome !== undefined) {
+    fields.push('householdincome = ?');
+    values.push(householdIncome);
+  }
+  if (petStatus !== undefined) {
+    fields.push('petstatus = ?');
+    values.push(petStatus);
+  }
+  if (fedback !== undefined) {
+    fields.push('feedback = ?');
+    values.push(fedback);
+  }
+
   if (fields.length === 0) {
     return res.status(400).json({ message: 'No valid fields to update' });
   }
 
-  values.push(userId); // add userId for WHERE clause
+  values.push(userId);
 
   const sql = `UPDATE users SET ${fields.join(', ')} WHERE id = ?`;
 
@@ -522,12 +615,16 @@ router.put('/profile', normalUser, (req, res) => {
   });
 });
 
+
 // Get own profile (normal user)
 router.get('/profile', normalUser, (req, res) => {
   const userId = req.user.userId; // from JWT
 
   db.query(
-    'SELECT id, first_name, last_name, email, phone_number, user_name, is_admin, user_refer_id FROM users WHERE id = ?',
+     `SELECT 
+      id, first_name, last_name, email, phone_number, user_name, is_admin, user_refer_id,
+      country, state, city, province, zip, dob, homestatus, employmentstatus, householdincome, petstatus, feedback, created_at
+    FROM users WHERE id = ?`,
     [userId],
     (err, results) => {
       if (err) return res.status(500).json({ message: 'Database error', error: err });
@@ -611,19 +708,19 @@ router.get('/user-created-at', (req, res) => {
 });
 
 
-router.delete("/user/:id", adminOnly,(req, res)=>{
+router.delete("/user/:id", adminOnly, (req, res) => {
 
   const userId = req.params.id;
 
 
-  
+
   db.query(
     'DELETE FROM users WHERE id=?',
     [userId],
-    (err, result)=>{
-      if(err)return res.status(500).json({ message: 'Database error', error: err });
+    (err, result) => {
+      if (err) return res.status(500).json({ message: 'Database error', error: err });
       if (results.length === 0) return res.status(404).json({ message: 'User not found' });
-      res.json({message:'Your user has been deleted'})
+      res.json({ message: 'Your user has been deleted' })
 
     }
 

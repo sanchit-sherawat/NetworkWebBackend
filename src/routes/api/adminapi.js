@@ -52,7 +52,7 @@ router.post('/payment', async (req, res) => {
 router.get('/users', (req, res) => {
     const userSql = `
     SELECT 
-      u.id, u.first_name, u.last_name, u.email, u.phone_number, u.user_name, u.is_admin, u.user_refer_id,u.is_confirmation,
+      u.id, u.first_name, u.last_name, u.email, u.phone_number, u.user_name, u.is_admin, u.user_refer_id,u.is_confirmation,u.created_at as user_created_at,
       p.btc_transaction, p.eth_transaction, p.usdt_transaction, p.created_at 
     FROM users u
     LEFT JOIN payment_transaction p ON u.id = p.user_id
