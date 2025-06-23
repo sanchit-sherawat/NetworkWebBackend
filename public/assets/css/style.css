@@ -79,8 +79,11 @@ a:focus {
 .mb-20{
   margin-bottom: 20px!important;
 }
-.font-10{
-  font-size: 10px!important;
+.mt-32{
+  margin-top: 32px!important;
+}
+.font-12{
+  font-size: 12px!important;
 }
 .text-theme-blue{
   color: var(--mainColor)!important;
@@ -3758,7 +3761,7 @@ SIGN IN & LOG IN AREA CSS
 
 .user-area-style .contact-form-action {
   border: 1px solid #ebf0ff;
-  padding: 50px;
+  padding: 25px 50px 50px 50px;
   margin: auto;
   max-width: 850px;
 }
