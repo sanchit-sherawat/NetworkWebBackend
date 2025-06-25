@@ -96,10 +96,10 @@ router.post('/register', (req, res) => {
   <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:800px; background-color:#ffffff; font-family: Arial, sans-serif; color:#333333; line-height:1.6;">
     <tr>
       <td style="padding: 30px;">
-        <p>Hello ${firstName}&nbsp;/&nbsp;${lastName},</p>
+        <p>Hello ${firstName}&nbsp;${lastName},</p>
         <p>Congratulations!<br />Your Registration has been received and your VIRON.NETWORK account has been created.</p>
         <p>You are now registered and is valuably&nbsp;<strong><u>Time &amp; Date Stamped</u></strong>.</p>
-        <p>Before you log-in, please take a couple of minutes to review this entire page.</p>
+        <p>Before you log-in, please take a minute to review this entire page.</p>
       </td>
     </tr>
     <tr>
@@ -110,7 +110,7 @@ router.post('/register', (req, res) => {
         <p>To log in to your VIRON.NETWORK account, use the Username and Password you&rsquo;ve just provided during your Registration, which is as follows:</p>
         <p><strong>Username:</strong> ${username}<br>
         <strong>Password:</strong> ${password}</p>
-        <p><strong>VIRON Member-Center Login Here:</strong><br /><a href="https://viron.network/member//#/login" target="_blank" style="display: inline-block; padding: 12px 24px; background-color: #D00000; color: #ffffff; text-decoration: none; border-radius: 4px;">Login</a></p>
+        <p><strong>Member-Center Login Here:</strong><br /><a href="https://viron.network/member//#/login" target="_blank" style="display: inline-block; padding: 12px 24px; background-color: #D00000; color: #ffffff; text-decoration: none; border-radius: 4px;">LOGIN to VIRON.NETWORK</a></p>
         <p style="font-size: 12px; color: #0000B3;">*We advise you to secure your username & password.</p>
         </div>  
       </td>
@@ -120,7 +120,7 @@ router.post('/register', (req, res) => {
         <p style="text-align: center;"><strong>FOR YOUR CONVENIENCE:</strong></p>
         <ul>
           <li style="margin-bottom: 20px;">All Sales and Purchases are subject to the VIRON <strong>Terms of Use</strong> as described at: <a href="https://viron.network/terms-of-use.html" target="_blank" style="color: #0000B3;">https://viron.network/terms-of-use.html</a> and governs the VIRON.NETWORK website and its members. It is located at the bottom of every web page on the VIRON.NETWORK website. Further, all Members, including you, acknowledge and agree to it every time you log in. So please review it entirely.</li>
-          <li><strong>Important:</strong> Although VIRON will professionally handle all major work for you, it is essential that you understand it is <u>your</u> We advise that you familiarize yourself with all aspects of your VIRON business. We recommend that you visit all pages of the website and review all areas of your Back-Office to become familiar with and fully understand VIRON&rsquo;s game-changing capabilities.</li>
+          <li><strong>Important:</strong> Although VIRON will professionally handle all major work for you, it is essential that you understand it is <em><u>your</u></em> business. We advise that you familiarize yourself with all aspects of your VIRON business. We recommend that you visit all pages of the website and review all areas of your Back-Office to become familiar and fully understand VIRON&rsquo;s game-changing capabilities.</li>
         </ul>
         <p style="text-align: center;"><a href="https://viron.network/member//#/login" target="_blank" style="display: inline-block; padding: 12px 24px; background-color: #D00000; color: #ffffff; text-decoration: none; border-radius: 4px;">LOGIN to VIRON.NETWORK</a></p>
         <p>If you have any questions or need help, the best way to contact VIRON Member Support is to Email us at: <a href="mailto:Support@VIRON.NETWORK" style="color: #0000B3;">Support@VIRON.NETWORK</a>&nbsp;and our staff team will be happy to assist you during regular business hours.</p>
@@ -260,7 +260,7 @@ router.post('/payment', normalUser, (req, res) => {
     </div>
     <h2 style="color: #D00000; text-align: center; margin-bottom:0px;">IMPORTANT NOTIFICATION</h2>
     <h3 style="text-align: center; margin-top:10px"><strong>Your Payment is Processing.</strong></h3>
-    <p>Hello <strong>${first_name} / ${last_name}</strong>,</p>
+    <p>Hello <strong>${first_name} ${last_name}</strong>,</p>
        <p>Your cryptocurrency payment for your <strong><u>VIRON Home-Business (&ldquo;VHB&rdquo;)</u> </strong>is being processed and is awaiting confirmation on the Blockchain.<strong style="color: #D00000;"> The VIRON Administrators have been notified. </strong>Once your payment is confirmed and cleared, your VHB account status will be marked &ldquo;PAID&rdquo;.</p>
     <p>The VIRON Administrators will then correctly set up your account with the qualified <strong>third-party MLM company</strong>, which will complete your VHB.</p>
     <p>We will be in touch with you at each step, and you will be notified accordingly.</p>
