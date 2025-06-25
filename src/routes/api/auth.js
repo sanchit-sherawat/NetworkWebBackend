@@ -79,6 +79,8 @@ router.post('/register', (req, res) => {
       ],
       (err2, result) => {
         if (err2) return res.status(500).json({ message: 'Error inserting user', error: err2 });
+        const ubuntuTime = new Date().toLocaleString('en-GB', { timeZone: 'UTC' }); // or system time zone
+
 
 
         console.log("database me dal deya gya hai ")
@@ -98,7 +100,7 @@ router.post('/register', (req, res) => {
       <td style="padding: 30px;">
         <p>Hello ${firstName}&nbsp;${lastName},</p>
         <p>Congratulations!<br />Your Registration has been received and your VIRON.NETWORK account has been created.</p>
-        <p>You are now registered and is valuably&nbsp;<strong><u>Time &amp; Date Stamped</u></strong>.</p>
+        <p>You are now registered and is valuably&nbsp;<strong><u>Time &amp; Date Stamped : ${ubuntuTime} UTC</u></strong>.</p>
         <p>Before you log-in, please take a minute to review this entire page.</p>
       </td>
     </tr>
