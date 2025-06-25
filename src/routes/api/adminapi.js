@@ -57,6 +57,7 @@ router.get('/users', (req, res) => {
       p.btc_transaction, p.eth_transaction, p.usdt_transaction, p.created_at 
     FROM users u
     LEFT JOIN payment_transaction p ON u.id = p.user_id
+    WHERE u.is_admin != 1 AND (u.is_callcenter IS NULL OR u.is_callcenter != 1)
   `;
 
     console.log("userSql is :", userSql)
@@ -85,6 +86,88 @@ router.get('/users', (req, res) => {
     });
 });
 
+// Get users who are admin or call center
+router.get('/users/admin-or-callcenter', adminOnly, (req, res) => {
+  const sql = `
+    SELECT 
+      id, first_name, last_name, email, phone_number, user_name, is_admin, is_callcenter, user_refer_id, is_confirmation, created_at,
+      country, state, city, province, zip, dob, homestatus, employmentstatus, householdincome, petstatus, feedback
+    FROM users
+    WHERE is_admin = 1 OR is_callcenter = 1
+  `;
+
+  db.query(sql, (err, results) => {
+    if (err) return res.status(500).json({ message: 'Database error', error: err });
+    res.json(results);
+  });
+});
+
+// Update user by ID (admin only)
+router.put('/user/:id', adminOnly, (req, res) => {
+  const userId = req.params.id;
+  const {
+    first_name,
+    last_name,
+    email,
+    phone_number,
+    user_name,
+    password,
+    is_admin,
+    is_callcenter,
+    userReferId,
+    country,
+    state,
+    city,
+    province,
+    zip,
+    dob,
+    homestatus,
+    employmentstatus,
+    householdincome,
+    petstatus,
+    feedback
+  } = req.body;
+
+  // Build dynamic query
+  const fields = [];
+  const values = [];
+
+  if (first_name !== undefined) { fields.push('first_name = ?'); values.push(first_name); }
+  if (last_name !== undefined) { fields.push('last_name = ?'); values.push(last_name); }
+  if (email !== undefined) { fields.push('email = ?'); values.push(email); }
+  if (phone_number !== undefined) { fields.push('phone_number = ?'); values.push(phone_number); }
+  if (user_name !== undefined) { fields.push('user_name = ?'); values.push(user_name); }
+  if (password !== undefined) { fields.push('password = ?'); values.push(password); }
+  if (is_admin !== undefined) { fields.push('is_admin = ?'); values.push(is_admin); }
+  if (is_callcenter !== undefined) { fields.push('is_callcenter = ?'); values.push(is_callcenter); }
+  if (userReferId !== undefined) { fields.push('user_refer_id = ?'); values.push(userReferId); }
+  if (country !== undefined) { fields.push('country = ?'); values.push(country); }
+  if (state !== undefined) { fields.push('state = ?'); values.push(state); }
+  if (city !== undefined) { fields.push('city = ?'); values.push(city); }
+  if (province !== undefined) { fields.push('province = ?'); values.push(province); }
+  if (zip !== undefined) { fields.push('zip = ?'); values.push(zip); }
+  if (dob !== undefined) { fields.push('dob = ?'); values.push(dob); }
+  if (homestatus !== undefined) { fields.push('homestatus = ?'); values.push(homestatus); }
+  if (employmentstatus !== undefined) { fields.push('employmentstatus = ?'); values.push(employmentstatus); }
+  if (householdincome !== undefined) { fields.push('householdincome = ?'); values.push(householdincome); }
+  if (petstatus !== undefined) { fields.push('petstatus = ?'); values.push(petstatus); }
+  if (feedback !== undefined) { fields.push('feedback = ?'); values.push(feedback); }
+
+  if (fields.length === 0) {
+    return res.status(400).json({ message: 'No valid fields to update' });
+  }
+
+  values.push(userId);
+
+  const sql = `UPDATE users SET ${fields.join(', ')} WHERE id = ?`;
+
+  db.query(sql, values, (err, result) => {
+    if (err) return res.status(500).json({ message: 'Database error', error: err });
+    if (result.affectedRows === 0) return res.status(404).json({ message: 'User not found' });
+    res.json({ message: 'User updated successfully' });
+  });
+});
+
 // Get user by ID
 router.get('/users/:id', (req, res) => {
     const userId = req.params.id;
@@ -107,6 +190,51 @@ router.put('/users/:id', (req, res) => {
             res.json({ message: 'User updated successfully' });
         }
     );
+});
+
+// Create user API (admin only)
+router.post('/users', adminOnly, (req, res) => {
+  const {
+    first_name,
+    last_name,
+    email,
+    phone_number,
+    user_name,
+    password,
+    is_admin = 0,
+    is_callcenter = 0,
+    userReferId = null,
+    country,
+    state,
+    city,
+    province,
+    zip,
+    dob,
+    homestatus,
+    employmentstatus,
+    householdincome,
+    petstatus,
+    feedback
+  } = req.body;
+
+  if (!first_name || !last_name || !email || !phone_number || !user_name || !password) {
+    return res.status(400).json({ message: 'All required fields must be provided' });
+  }
+
+  db.query(
+    `INSERT INTO users (
+      first_name, last_name, email, phone_number, user_name, password, is_admin, is_callcenter, user_refer_id,
+      country, state, city, province, zip, dob, homestatus, employmentstatus, householdincome, petstatus, feedback
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [
+      first_name, last_name, email, phone_number, user_name, password, is_admin, is_callcenter, userReferId,
+      country, state, city, province, zip, dob, homestatus, employmentstatus, householdincome, petstatus, feedback
+    ],
+    (err, result) => {
+      if (err) return res.status(500).json({ message: 'Database error', error: err });
+      res.status(201).json({ message: 'User created successfully', userId: result.insertId });
+    }
+  );
 });
 
 // Delete user by ID

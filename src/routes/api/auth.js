@@ -184,6 +184,7 @@ router.post('/login', (req, res) => {
         username: user.user_name,
         userId: user.id,
         isAdmin: user.is_admin,
+        iscallcenter: user.is_callcenter,
       });
     }
   );
