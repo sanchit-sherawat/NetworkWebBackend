@@ -129,6 +129,18 @@ app.get(/^\/member(\/.*)?$/, (req, res) => {
   res.sendFile(path.join(buildPath, 'index.html'));
 });
 
+// === Catch-all for dynamic usernames ===
+app.get('/:username', (req, res) => {
+  const knownPages = Object.keys(routeMap);
+  const username = req.params.username;
+
+  if (!knownPages.includes(username)) {
+    return res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  }
+
+  res.status(404).send('Page not found');
+});
+
 
 // Start Server
 const PORT = process.env.PORT || 3000;

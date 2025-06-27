@@ -528,10 +528,12 @@ router.put('/profile', normalUser, (req, res) => {
     zip,
     dob,
     homeStatus,
+   
     employmentStatus,
     householdIncome,
     petStatus,
-    fedback
+    fedback,
+     socialMedia,
   } = req.body;
 
   const fields = [];
@@ -603,6 +605,10 @@ router.put('/profile', normalUser, (req, res) => {
     fields.push('feedback = ?');
     values.push(fedback);
   }
+  if (socialMedia !== undefined) {
+    fields.push('social_media = ?');
+    values.push(socialMedia);
+  }
 
   if (fields.length === 0) {
     return res.status(400).json({ message: 'No valid fields to update' });
@@ -625,7 +631,7 @@ router.get('/profile', normalUser, (req, res) => {
 
   db.query(
      `SELECT 
-      id, first_name, last_name, email, phone_number, user_name, is_admin, user_refer_id,
+      id, first_name, last_name, email, phone_number, user_name, is_admin, user_refer_id, social_media as socialMedia,
       country, state, city, province, zip, dob, homestatus, employmentstatus, householdincome, petstatus, feedback, created_at
     FROM users WHERE id = ?`,
     [userId],
@@ -733,6 +739,37 @@ router.delete("/user/:id", adminOnly, (req, res) => {
 
 
 })
+
+
+// GET /api/getuser/:username
+router.get('/getuser/:username', (req, res) => {
+  const { username } = req.params;
+
+  if (!username) {
+    return res.status(400).json({ message: 'Username is required' });
+  }
+
+  const sql = `
+    SELECT user_name AS userName, first_name AS firstName, last_name AS lastName 
+    FROM users 
+    WHERE user_name = ?
+    LIMIT 1
+  `;
+
+  db.query(sql, [username], (err, results) => {
+    if (err) {
+      console.error("Database error in getuser:", err);
+      return res.status(500).json({ message: 'Database error', error: err });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json(results[0]);
+  });
+});
+
 
 
 
