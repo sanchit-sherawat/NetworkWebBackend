@@ -47,6 +47,11 @@
 		<div class="nav-area">
 			<div class="navbar-area">
 				<div class="main-nav">
+					<section id="user-profile-section" style="display: none; background-color: #f8f9fa; padding: 20px; text-align: center;">
+						<div class="container">
+							<div id="userInfo"></div>
+						</div>
+					</section>
 					<nav class="navbar navbar-expand-md">
 						<div class="container">
 							<a class="navbar-brand" href="home">
@@ -299,7 +304,39 @@
 			<i class='bx bx-chevrons-up'></i>
 		</div>
 		<!-- END GO TOP AREA -->
-		
+		<script>
+		document.addEventListener('DOMContentLoaded', function () {
+					const section = document.getElementById("user-profile-section");
+						const container = document.getElementById("userInfo");
+
+			// Get values from localStorage
+			const userName = localStorage.getItem("userName");
+			const firstName = localStorage.getItem("firstName");
+			const lastName = localStorage.getItem("lastName");
+
+			// // Show in elements with specific IDs
+			// if (userName) {
+			// 	const el = document.getElementById('userName-display');
+			// 	// if (el) el.textContent = userName;
+			// }
+			// if (firstName) {
+			// 	const el = document.getElementById('firstName-display');
+			// 	// if (el) el.textContent = firstName;
+			// }
+			// if (lastName) {
+			// 	const el = document.getElementById('lastName-display');
+			// 	// if (el) el.textContent = lastName;
+			// }
+
+			// Only show if firstName and lastName exist
+			if (firstName && lastName && container) {
+				section.style.display = 'block'; // Make the section visible
+				container.innerHTML = `
+        <p>Welcome to ${firstName} ${lastName}'s ADVISOR website!</p>
+      `;
+			}
+		});
+	</script>
         <!-- JQUERY.SLIM.MIN.JS -->
         <script src="assets/js/jquery.slim.min.js"></script>
         <!-- POPPER JS -->
