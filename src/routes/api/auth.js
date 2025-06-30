@@ -270,7 +270,7 @@ router.post('/payment', normalUser, (req, res) => {
     <p><strong style="color: #D00000;">STRONG EMPHASIS:</strong> Your VIRON position is currently <u>secure and locked per your Time/Date Stamp</u>. Until the Pre-Launch is over, your funds are placed in our ESCROW account. <span style="background-color: yellow;">Your funds are only drawn when the following steps are completed:</span></p>
     <ol style="list-style: none; margin: 0; padding: 0;">
       <li style="margin: 0; padding: 0 0 0 2em; position: relative;"><span style="position: absolute; left: 0; right:20px; color: #D00000; font-weight: bold;">(i.)</span>You are correctly placed with the third-party MLM company: <strong>SAVE CLUB (&ldquo;<u style="color: #0000B3;">SC</u>&rdquo;)</strong>.</li>
-      <li style="margin: 0; padding: 0 0 0 2em; position: relative;"><span style="position: absolute; left: 0; right:20px; color: #D00000; font-weight: bold;">(ii.)</span>Your <strong>VIRON DRs</strong> purchased are placed into your <strong><u style="color: #0000B3;">SC</u></strong></li>
+      <li style="margin: 0; padding: 0 0 0 2em; position: relative;"><span style="position: absolute; left: 0; right:20px; color: #D00000; font-weight: bold;">(ii.)</span>Your <strong>VIRON DRs</strong> purchased are placed into your <strong><u style="color: #0000B3;">SC</u></strong> account</li>
     </ol>
     <p><strong style="color: #D00000;">*Please be advised that VIRON continues to invest ongoing professional efforts and resources even before the completion of the above steps for you. <u>Please exercise patience during our Pre-Launch</u>. </strong>We will be with you every step of the way.</p>
     <p style="color: #0000B3; text-align:center; margin-bottom:5px; padding-bottom:0px;"><strong>VIRON TELEGRAM CHANNEL:</strong></p>
@@ -282,7 +282,6 @@ router.post('/payment', normalUser, (req, res) => {
       <p style="color: #0000B3;"><strong><u>JUST IN CASE YOU CANNOT GET BACK TO THIS PAGE</u></strong>, our system has also sent you an Email notification containing the same information that is on this page. *When checking your email, please don&rsquo;t forget to check your spam folder as well.</p>
     <hr/>
     <p style="text-align:center"><strong><em>Welcome to the Evolution of Network Marketing!</em></strong></p>
-    <p style="text-align:center"><a href="https://viron.network/member//#/loginPage" target='_blank' rel='noopener noreferrer' style="background: #D00000; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">LOGIN to VIRON.NETWORK</a></p>
     <p style="text-align:center"><strong><em>-The VIRON Administration</em></strong></p>ß
   </body>
 </html>`
