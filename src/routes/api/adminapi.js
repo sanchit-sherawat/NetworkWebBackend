@@ -358,7 +358,7 @@ router.put('/users/:id/refer', adminOnly, (req, res) => {
         <p>If you have any questions or need help, the best way to contact VIRON Member Support is via our CONTACT US page or via Email: <a href="mailto:Support@VIRON.NETWORK">Support@VIRON.NETWORK</a>. Our staff team will be happy to assist you during regular business hours.</p>
         <p style="text-align: center;"><em><strong>Welcome to the Evolution of Network Marketing!</strong></em></p> 
         <div style="text-align: center;">
-            <a href="login.html" style="display: inline-block; padding: 12px 24px; background-color: #D00000; color: #ffffff; text-decoration: none; border-radius: 4px;">LOGIN TO VIRON.NETWORK</a>
+            <a href="https://viron.network/member/loginPage" style="display: inline-block; padding: 12px 24px; background-color: #D00000; color: #ffffff; text-decoration: none; border-radius: 4px;">LOGIN TO VIRON.NETWORK</a>
         </div>
         <p><strong><em>-The VIRON Administration</em></strong></p>
       </td>
@@ -417,7 +417,7 @@ router.put('/users/:id/refer', adminOnly, (req, res) => {
         <p>If you have any questions or need help, the best way to contact VIRON Member Support is via our CONTACT US page or via Email: <a href="mailto:Support@VIRON.NETWORK">Support@VIRON.NETWORK</a>. Our staff team will be happy to assist you during regular business hours.</p>
         <p style="text-align: center;"><em><strong>Welcome to the Evolution of Network Marketing!</strong></em></p>
         <div style="text-align: center;">
-            <a href="login.html" style="display: inline-block; padding: 12px 24px; background-color: #D00000; color: #ffffff; text-decoration: none; border-radius: 4px;">LOGIN TO VIRON.NETWORK</a>
+            <a href="https://viron.network/member/loginPage" style="display: inline-block; padding: 12px 24px; background-color: #D00000; color: #ffffff; text-decoration: none; border-radius: 4px;">LOGIN TO VIRON.NETWORK</a>
         </div>
         <p><strong><em>-The VIRON Administration</em></strong></p>
       </td>
