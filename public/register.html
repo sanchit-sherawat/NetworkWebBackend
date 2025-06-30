@@ -445,8 +445,8 @@
 
 			// Check all three, stop at first found
 			foundUserId = await checkSponsor(username);
-			if (!foundUserId) foundUserId = await checkSponsor(email);
-			if (!foundUserId) foundUserId = await checkSponsor(phone);
+			// if (!foundUserId) foundUserId = await checkSponsor(email);
+			// if (!foundUserId) foundUserId = await checkSponsor(phone);
 
 			// Redirect accordingly
 			if (foundUserId) {
