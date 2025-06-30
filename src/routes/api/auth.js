@@ -794,9 +794,9 @@ router.get('/user-payment-status/:userId',async (req, res) => {
         (err2, paymentResults) => {
           if (err2) return res.status(500).json({ message: 'Database error', error: err2 });
 
-          let paymentStatus = "notpaid";
+          let paymentStatus = "Not Paid";
           if (paymentResults.length > 0) {
-            paymentStatus = is_confirmation == 1 ? "paid" : "pending";
+            paymentStatus = is_confirmation == 1 ? "Paid" : "Verification Pending";
           }
 
           // 3. Get referrer full name (if user_refer_id exists)

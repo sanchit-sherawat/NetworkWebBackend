@@ -176,7 +176,7 @@
 						</div>
 
 
-						<div class="col-12">
+						<!-- <div class="col-12">
 							<div class="form-group">
 								<input class="form-control" id="email" type="email" name="email"
 									placeholder="Email of Your Referrer" >
@@ -190,7 +190,7 @@
 									placeholder="Phone Number of Your Referrer" >
 								<small id="phone-check-message" style="color:red;"></small>
 							</div>
-						</div>
+						</div> -->
 
 						<div class="col-12">
 							<button class="default-btn btn-two" type="submit" id="register-submit-btn">
@@ -400,18 +400,18 @@
 
 	<!-- <script> -->
 	<script>
-		const input = document.querySelector("#phone");
-		const iti = window.intlTelInput(input, {
-			separateDialCode: false,
-			preferredCountries: ["vn", "us", "gb"],
-			utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js"
-		});
+		// const input = document.querySelector("#phone");
+		// const iti = window.intlTelInput(input, {
+		// 	separateDialCode: false,
+		// 	preferredCountries: ["vn", "us", "gb"],
+		// 	utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js"
+		// });
 
 		document.getElementById('registerForm').addEventListener('submit', async function (e) {
 			e.preventDefault();
 
 			const form = e.target;
-			const fullPhone = iti.getNumber(); // E.g. +919876543210
+			// const fullPhone = iti.getNumber(); // E.g. +919876543210
 
 			// const data = {
 			// 	username: form.user_name.value,
@@ -425,8 +425,8 @@
 			// Get the sponsor value (username, email, or phone)
 			// Get all sponsor values
 			const username = document.getElementById('user_name').value.trim();
-			const email = document.getElementById('email').value.trim();
-			const phone = document.getElementById('phone').value.trim();
+			// const email = document.getElementById('email').value.trim();
+			// const phone = document.getElementById('phone').value.trim();
 
 			let foundUserId = null;
 
