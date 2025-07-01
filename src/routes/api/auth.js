@@ -258,7 +258,7 @@ router.post('/payment', normalUser, (req, res) => {
 <html>
   <body style="font-family: Arial, sans-serif; color: #333; line-height: 1.6; max-width: 700px; margin: auto; padding: 2rem; background: #f9f9f9;">
     <div style="text-align: center; margin-bottom: 2rem;">
-      <img src="https://viron.network/assets/img/viron-logo.svg" alt="Viron Logo" style="max-width: 180px;" />
+      <img src="https://viron.network/assets/img/viron-logo.png" alt="Viron Logo" style="max-width: 180px;" />
     </div>
     <h2 style="color: #D00000; text-align: center; margin-bottom:0px;">IMPORTANT NOTIFICATION</h2>
     <h3 style="text-align: center; margin-top:10px"><strong>Your Payment is Processing.</strong></h3>
