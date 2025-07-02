@@ -10,80 +10,83 @@ const { adminOnly, normalUser } = require('../Middleware');
 
 // Create/Set Password API
 router.post('/set-password', (req, res) => {
-    const { email, password } = req.body;
+  const { email, password } = req.body;
 
-    if (!email || !password) {
-        return res.status(400).json({ message: 'Email and password are required' });
+  if (!email || !password) {
+    return res.status(400).json({ message: 'Email and password are required' });
+  }
+
+  // Check if user exists
+  db.query('SELECT * FROM users WHERE email = ?', [email], (err, results) => {
+    if (err) return res.status(500).json({ message: 'Database error', error: err });
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'User not found' });
     }
 
-    // Check if user exists
-    db.query('SELECT * FROM users WHERE email = ?', [email], (err, results) => {
-        if (err) return res.status(500).json({ message: 'Database error', error: err });
-        if (results.length === 0) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-
-        // Update password (consider hashing in production)
-        db.query('UPDATE users SET password = ? WHERE email = ?', [password, email], (err2) => {
-            if (err2) return res.status(500).json({ message: 'Error updating password', error: err2 });
-            res.json({ message: 'Password set successfully' });
-        });
+    // Update password (consider hashing in production)
+    db.query('UPDATE users SET password = ? WHERE email = ?', [password, email], (err2) => {
+      if (err2) return res.status(500).json({ message: 'Error updating password', error: err2 });
+      res.json({ message: 'Password set successfully' });
     });
+  });
 });
 
 // POST /api/payment
 router.post('/payment', async (req, res) => {
-    const { user_id, btc_txn, eth_txn, usdt_txn } = req.body;
+  const { user_id, btc_txn, eth_txn, usdt_txn } = req.body;
 
-    try {
-        await db.query(
-            'INSERT INTO payment_transaction (user_id, btc_transaction, eth_transaction, usdt_transaction) VALUES (?, ?, ?, ?)',
-            [user_id, btc_txn, eth_txn, usdt_txn]
-        );
-        res.status(200).json({ message: 'Payment saved successfully' });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'Error saving payment' });
-    }
+  try {
+    await db.query(
+      'INSERT INTO payment_transaction (user_id, btc_transaction, eth_transaction, usdt_transaction) VALUES (?, ?, ?, ?)',
+      [user_id, btc_txn, eth_txn, usdt_txn]
+    );
+    res.status(200).json({ message: 'Payment saved successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Error saving payment' });
+  }
 });
 
 
 // Get all users
 router.get('/users', (req, res) => {
-    const userSql = `
+  const userSql = `
     SELECT 
-      u.id, u.first_name, u.last_name, u.email, u.phone_number, u.user_name, u.is_admin, u.user_refer_id,u.is_confirmation,u.created_at as user_created_at,
+      u.id, u.first_name, u.last_name, u.email, u.phone_number, u.user_name, u.is_admin, u.user_refer_id,u.is_confirmation,u.created_at as user_created_at,u.ds_id,
       u.country, u.state, u.city, u.province, u.zip, u.dob, u.homestatus, u.employmentstatus, u.householdincome, u.petstatus, u.feedback,
-      p.btc_transaction, p.eth_transaction, p.usdt_transaction, p.created_at 
+      p.btc_transaction, p.eth_transaction, p.usdt_transaction, p.created_at,
+      (
+        SELECT COUNT(*) FROM users WHERE ds_id = u.id
+      ) AS ds_count
     FROM users u
     LEFT JOIN payment_transaction p ON u.id = p.user_id
     WHERE u.is_admin != 1 AND (u.is_callcenter IS NULL OR u.is_callcenter != 1)
   `;
 
-    console.log("userSql is :", userSql)
+  console.log("userSql is :", userSql)
 
-    db.query(userSql, (err, results) => {
-        if (err) return res.status(500).json({ message: 'Database error', error: err });
+  db.query(userSql, (err, results) => {
+    if (err) return res.status(500).json({ message: 'Database error', error: err });
 
-        console.log("results are :", results)
+    console.log("results are :", results)
 
-        // Map results to include transaction type and value
-        const users = results.map(user => {
-            let transaction = null;
-            if (user.btc_transaction) {
-                transaction = { type: 'btc_transaction', value: user.btc_transaction, created_at: user.created_at };    
-            } else if (user.eth_transaction) {
-                transaction = { type: 'eth_transaction', value: user.eth_transaction ,created_at: user.created_at};
-            } else if (user.usdt_transaction) {     
-                transaction = { type: 'usdt_transaction', value: user.usdt_transaction ,created_at: user.created_at};
-            }
-            // Remove raw transaction columns from output
-            const { btc_transaction, eth_transaction, usdt_transaction, created_at,...userData } = user;
-            return { ...userData, transaction };
-        });
-
-        res.json(users);
+    // Map results to include transaction type and value
+    const users = results.map(user => {
+      let transaction = null;
+      if (user.btc_transaction) {
+        transaction = { type: 'btc_transaction', value: user.btc_transaction, created_at: user.created_at };
+      } else if (user.eth_transaction) {
+        transaction = { type: 'eth_transaction', value: user.eth_transaction, created_at: user.created_at };
+      } else if (user.usdt_transaction) {
+        transaction = { type: 'usdt_transaction', value: user.usdt_transaction, created_at: user.created_at };
+      }
+      // Remove raw transaction columns from output
+      const { btc_transaction, eth_transaction, usdt_transaction, created_at, ...userData } = user;
+      return { ...userData, transaction };
     });
+
+    res.json(users);
+  });
 });
 
 // Get users who are admin or call center
@@ -170,26 +173,26 @@ router.put('/user/:id', adminOnly, (req, res) => {
 
 // Get user by ID
 router.get('/users/:id', (req, res) => {
-    const userId = req.params.id;
-    db.query('SELECT id, first_name, last_name, email, phone_number, user_name, is_admin, user_refer_id FROM users WHERE id = ?', [userId], (err, results) => {
-        if (err) return res.status(500).json({ message: 'Database error', error: err });
-        if (results.length === 0) return res.status(404).json({ message: 'User not found' });
-        res.json(results[0]);
-    });
+  const userId = req.params.id;
+  db.query('SELECT id, first_name, last_name, email, phone_number, user_name, is_admin, user_refer_id FROM users WHERE id = ?', [userId], (err, results) => {
+    if (err) return res.status(500).json({ message: 'Database error', error: err });
+    if (results.length === 0) return res.status(404).json({ message: 'User not found' });
+    res.json(results[0]);
+  });
 });
 
 // Update user by ID
 router.put('/users/:id', (req, res) => {
-    const userId = req.params.id;
-    const { firstName, lastName, email, phoneNumber, userName, isAdmin, userReferId } = req.body;
-    db.query(
-        'UPDATE users SET first_name=?, last_name=?, email=?, phone_number=?, user_name=?, is_admin=?, user_refer_id=? WHERE id=?',
-        [firstName, lastName, email, phoneNumber, userName, isAdmin, userReferId, userId],
-        (err, result) => {
-            if (err) return res.status(500).json({ message: 'Database error', error: err });
-            res.json({ message: 'User updated successfully' });
-        }
-    );
+  const userId = req.params.id;
+  const { firstName, lastName, email, phoneNumber, userName, isAdmin, userReferId } = req.body;
+  db.query(
+    'UPDATE users SET first_name=?, last_name=?, email=?, phone_number=?, user_name=?, is_admin=?, user_refer_id=? WHERE id=?',
+    [firstName, lastName, email, phoneNumber, userName, isAdmin, userReferId, userId],
+    (err, result) => {
+      if (err) return res.status(500).json({ message: 'Database error', error: err });
+      res.json({ message: 'User updated successfully' });
+    }
+  );
 });
 
 // Create user API (admin only)
@@ -239,79 +242,79 @@ router.post('/users', adminOnly, (req, res) => {
 
 // Delete user by ID
 router.delete('/users/:id', (req, res) => {
-    const userId = req.params.id;
-    db.query('DELETE FROM users WHERE id = ?', [userId], (err, result) => {
-        if (err) return res.status(500).json({ message: 'Database error', error: err });
-        res.json({ message: 'User deleted successfully' });
-    });
+  const userId = req.params.id;
+  db.query('DELETE FROM users WHERE id = ?', [userId], (err, result) => {
+    if (err) return res.status(500).json({ message: 'Database error', error: err });
+    res.json({ message: 'User deleted successfully' });
+  });
 });
 
 
 // Confirm user only if payment exists (admin only)
 router.put('/users/:id/confirm', adminOnly, (req, res) => {
-    const userId = req.params.id;
+  const userId = req.params.id;
 
-    // Check if payment exists for this user
-    db.query('SELECT id FROM payment_transaction WHERE user_id = ?', [userId], (err, results) => {
-        if (err) return res.status(500).json({ message: 'Database error', error: err });
+  // Check if payment exists for this user
+  db.query('SELECT id FROM payment_transaction WHERE user_id = ?', [userId], (err, results) => {
+    if (err) return res.status(500).json({ message: 'Database error', error: err });
 
-        if (results.length === 0) {
-            return res.status(400).json({ message: 'No payment found for this user. Cannot confirm.' });
-        }
+    if (results.length === 0) {
+      return res.status(400).json({ message: 'No payment found for this user. Cannot confirm.' });
+    }
 
-        // Set is_confirmation = 1
-        db.query('UPDATE users SET is_confirmation = 1 WHERE id = ?', [userId], (err2, result) => {
-            if (err2) return res.status(500).json({ message: 'Database error', error: err2 });
-            if (result.affectedRows === 0) return res.status(404).json({ message: 'User not found' });
-            res.json({ message: 'User confirmed successfully.' });
-        });
+    // Set is_confirmation = 1
+    db.query('UPDATE users SET is_confirmation = 1 WHERE id = ?', [userId], (err2, result) => {
+      if (err2) return res.status(500).json({ message: 'Database error', error: err2 });
+      if (result.affectedRows === 0) return res.status(404).json({ message: 'User not found' });
+      res.json({ message: 'User confirmed successfully.' });
     });
+  });
 });
 
 
 // Admin: Update user_refer_id for a user
 router.put('/users/:id/refer', adminOnly, (req, res) => {
-    const userId = req.params.id;
-    const { userReferId } = req.body;
+  const userId = req.params.id;
+  const { userReferId } = req.body;
 
-    if (!userReferId) {
-        return res.status(400).json({ message: 'userReferId is required' });
-    }
+  if (!userReferId) {
+    return res.status(400).json({ message: 'userReferId is required' });
+  }
 
-    db.query(
-        'UPDATE users SET user_refer_id = ? WHERE id = ?',
-        [userReferId, userId],
-        (err, result) => {
-            if (err) return res.status(500).json({ message: 'Database error', error: err });
-            if (result.affectedRows === 0) return res.status(404).json({ message: 'User not found' });
+  db.query(
+    'UPDATE users SET ds_id = ? WHERE id = ?',
+    [userReferId, userId],
+    (err, result) => {
+      if (err) return res.status(500).json({ message: 'Database error', error: err });
+      if (result.affectedRows === 0) return res.status(404).json({ message: 'User not found' });
 
-            // Get emails for both users
-            db.query(
-                'SELECT id, email, first_name, last_name, user_name FROM users WHERE id IN (?, ?)',
-  [userId, userReferId],
-  (err2, results) => {
-    if (err2) return res.status(500).json({ message: 'Database error', error: err2 });
-    if (results.length < 2) return res.status(404).json({ message: 'One or both users not found' });
+      // Get emails for both users
+      db.query(
+        'SELECT id, email, first_name, last_name, user_name FROM users WHERE id IN (?, ?)',
+        [userId, userReferId],
+        (err2, results) => {
+          if (err2) return res.status(500).json({ message: 'Database error', error: err2 });
+          if (results.length < 2) return res.status(404).json({ message: 'One or both users not found' });
 
-    const userEmail = results.find(u => u.id == userId)?.email;
-    const referEmail = results.find(u => u.id == userReferId)?.email;
+          const userEmail = results.find(u => u.id == userId)?.email;
+          const referEmail = results.find(u => u.id == userReferId)?.email;
 
-    const userFirstName = results.find(u => u.id == userId)?.first_name;
-    const userLastName = results.find(u => u.id == userId)?.last_name;
-    const userUsername = results.find(u => u.id == userId)?.user_name;
+          const userFirstName = results.find(u => u.id == userId)?.first_name;
+          const userLastName = results.find(u => u.id == userId)?.last_name;
+          const userUsername = results.find(u => u.id == userId)?.user_name;
 
-    const referFirstName = results.find(u => u.id == userReferId)?.first_name;
-    const referLastName = results.find(u => u.id == userReferId)?.last_name;
-    const referUsername = results.find(u => u.id == userReferId)?.user_name;
+          const referFirstName = results.find(u => u.id == userReferId)?.first_name;
+          const referLastName = results.find(u => u.id == userReferId)?.last_name;
+          const referUsername = results.find(u => u.id == userReferId)?.user_name;
 
-    console.log({ userEmail, referEmail, userFirstName, referFirstName, userUsername, referUsername });
+          console.log({ userEmail, referEmail, userFirstName, referFirstName, userUsername, referUsername });
 
 
-                const msgToUser = {
-                    to: userEmail,
-                    from: "admin@viron.network",
-                    subject: "Your referral has been updated",
-                    html: `
+          const msgToUser = {
+            to: userEmail,
+            from: "admin@viron.network",
+            subject: "Your referral has been updated",
+            html: `
     <!DOCTYPE html>
 <html>
 <head>
@@ -373,12 +376,12 @@ router.put('/users/:id/refer', adminOnly, (req, res) => {
 </html>
 
   `
-                };
-                const msgToRefer = {
-                    to: referEmail,
-                    from: "admin@viron.network",
-                    subject: "You have a new referral",
-                    html: `
+          };
+          const msgToRefer = {
+            to: referEmail,
+            from: "admin@viron.network",
+            subject: "You have a new referral",
+            html: `
     <!DOCTYPE html>
 <html>
 <head>
@@ -432,16 +435,16 @@ router.put('/users/:id/refer', adminOnly, (req, res) => {
 </html>
 
   `
-                };
-                // console.log("msgToUser is :", msgToUser)
-                // console.log("msgToRefer is :", msgToRefer)
+          };
+          // console.log("msgToUser is :", msgToUser)
+          // console.log("msgToRefer is :", msgToRefer)
 
-                Promise.all([sgMail.send(msgToUser), sgMail.send(msgToRefer)])
-                    .then(() => res.json({ message: 'User refer updated and emails sent successfully' }))
-                    .catch(emailErr => res.status(200).json({ message: 'User refer updated, but email failed', error: emailErr.message }));
-            });
-        }
-    );
+          Promise.all([sgMail.send(msgToUser), sgMail.send(msgToRefer)])
+            .then(() => res.json({ message: 'User refer updated and emails sent successfully' }))
+            .catch(emailErr => res.status(200).json({ message: 'User refer updated, but email failed', error: emailErr.message }));
+        });
+    }
+  );
 });
 
 router.delete('/users/:id', adminOnly, (req, res) => {

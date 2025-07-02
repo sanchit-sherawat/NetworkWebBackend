@@ -777,15 +777,15 @@ router.get('/user-payment-status/:userId',async (req, res) => {
 
   console.log("userId is :", userId)
 
-  // 1. Get user info (including user_refer_id and is_confirmation)
+  // 1. Get user info (including ds_id and is_confirmation)
   db.query(
-    `SELECT user_refer_id, is_confirmation FROM users WHERE id = ?`,
+    `SELECT ds_id, is_confirmation FROM users WHERE id = ?`,
     [userId],
     (err, userResults) => {
       if (err) return res.status(500).json({ message: 'Database error', error: err });
       if (userResults.length === 0) return res.status(404).json({ message: 'User not found' });
 
-      const { user_refer_id, is_confirmation } = userResults[0];
+      const { ds_id, is_confirmation } = userResults[0];
 
       // 2. Get payment transaction for this user
       db.query(
@@ -800,17 +800,17 @@ router.get('/user-payment-status/:userId',async (req, res) => {
           }
 
           // 3. Get referrer full name (if user_refer_id exists)
-          if (user_refer_id) {
+          if (ds_id) {
             db.query(
               `SELECT CONCAT(first_name, ' ', last_name) AS fullName, user_name AS userName FROM users WHERE id = ?`,
-              [user_refer_id],
+              [ds_id],
               (err3, referResults) => {
                 if (err3) return res.status(500).json({ message: 'Database error', error: err3 });
                 const referFullName = referResults.length > 0 ? referResults[0].fullName : null;
                 const referUserName = referResults.length > 0 ? referResults[0].userName : null;
                 res.json({
                   paymentStatus,
-                  userReferId: user_refer_id,
+                  userReferId: ds_id,
                   referFullName,
                   referUserName
                 });
