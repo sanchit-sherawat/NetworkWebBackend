@@ -398,7 +398,7 @@ router.put('/users/:id/refer', adminOnly, (req, res) => {
         <div style="border: 3px solid #D00000; padding: 30px; text-align: center;">
         <p style="color:#0000B3;">Hello ${referFirstName} ${referLastName},</p>
         <p style="color:#0000B3;">This is to notify you that your <strong>Direct Referral (DR)</strong> has been placed into your Account and Downline.</p>
-        <p><strong>Your <span style="color:#0000B3;">DS’s</span> profile:</strong><br /></p>
+        <p><strong>Your <span style="color:#0000B3;">DR’s</span> profile:</strong><br /></p>
         <p><strong>First Name: ${userFirstName}</strong><br/><strong>Last Name: ${userLastName}</strong><br/><strong>Email: ${userEmail}</strong></br><strong>VIRON Username: ${userUsername}</strong></p>
         <p style="color:#D00000;"><strong>You are now the &ldquo;DESIGNATED SPONSOR&rdquo; (DS) of the above DR.</strong></p>
         <p style="color:#0000B3;"><strong>Your DR is also notified of their account placement under you.</strong></p>
