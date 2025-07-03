@@ -6,6 +6,7 @@ const validatePhoneNumber = require('../../config/whatsapp');
 const { v4: uuidv4 } = require('uuid');
 const PasswordLink = require('../../models/password');
 const { adminOnly, normalUser } = require('../Middleware');
+// const { use } = require('react');
 // ...existing code...
 
 // Create/Set Password API
@@ -34,6 +35,14 @@ router.post('/set-password', (req, res) => {
 // POST /api/payment
 router.post('/payment', async (req, res) => {
   const { user_id, btc_txn, eth_txn, usdt_txn } = req.body;
+  if (user_id === undefined || (btc_txn === undefined && eth_txn === undefined && usdt_txn === undefined)) {
+    return res.status(400).json({ message: 'user_id and at least one transaction type are required' });
+  }
+  if (!user_id || (!btc_txn && !eth_txn && !usdt_txn)) {
+    return res.status(400).json({ message: 'user_id and at least one transaction type are required' });
+  }
+
+
 
   try {
     await db.query(
@@ -250,7 +259,27 @@ router.delete('/users/:id', (req, res) => {
 });
 
 
-// Confirm user only if payment exists (admin only)
+// // Confirm user only if payment exists (admin only)
+// router.put('/users/:id/confirm', adminOnly, (req, res) => {
+//   const userId = req.params.id;
+
+//   // Check if payment exists for this user
+//   db.query('SELECT id FROM payment_transaction WHERE user_id = ?', [userId], (err, results) => {
+//     if (err) return res.status(500).json({ message: 'Database error', error: err });
+
+//     if (results.length === 0) {
+//       return res.status(400).json({ message: 'No payment found for this user. Cannot confirm.' });
+//     }
+
+//     // Set is_confirmation = 1
+//     db.query('UPDATE users SET is_confirmation = 1 WHERE id = ?', [userId], (err2, result) => {
+//       if (err2) return res.status(500).json({ message: 'Database error', error: err2 });
+//       if (result.affectedRows === 0) return res.status(404).json({ message: 'User not found' });
+//       res.json({ message: 'User confirmed successfully.' });
+//     });
+//   });
+// });
+
 router.put('/users/:id/confirm', adminOnly, (req, res) => {
   const userId = req.params.id;
 
@@ -266,7 +295,66 @@ router.put('/users/:id/confirm', adminOnly, (req, res) => {
     db.query('UPDATE users SET is_confirmation = 1 WHERE id = ?', [userId], (err2, result) => {
       if (err2) return res.status(500).json({ message: 'Database error', error: err2 });
       if (result.affectedRows === 0) return res.status(404).json({ message: 'User not found' });
-      res.json({ message: 'User confirmed successfully.' });
+
+      // Get user info for email
+      db.query('SELECT email, first_name, last_name FROM users WHERE id = ?', [userId], (err3, userResults) => {
+        if (err3) return res.status(500).json({ message: 'Database error', error: err3 });
+        if (userResults.length === 0) return res.status(404).json({ message: 'User not found' });
+
+        const { email, first_name, last_name } = userResults[0];
+
+        // Prepare and send the verification email
+        const msg = {
+          to: email,
+          from: "admin@viron.network",
+          subject: `${first_name} , Your Payment is Now Verified`,
+          html: `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Payment Verification - VIRON.NETWORK </title>
+</head>
+<body style="margin:0; padding:0; background-color:#f5f5f5;">
+  <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:800px; background-color:#ffffff; font-family: Arial, sans-serif; color:#333333; line-height:1.6;">
+    <tr>
+      <td style="padding: 30px;">
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <img src="https://viron.network/assets/img/viron-logo.png" alt="Viron Logo" style="max-width: 180px;" />
+            <h2 style="color:#D00000; margin-top:5px;">NOTIFICATION</h2>
+            <h2 style="color:#D00000; margin-bottom: 0px;">Your Payment is Now Verified…</h2>
+            <p style="margin-top: 0px; color:#0000B3"><em>*Please review this message entirely for your familiarity.</em></p>
+        </div>
+        <p><strong>Hello&nbsp;${first_name} ${last_name},</strong></p>
+        <p style="color:#D00000;">Your payment for your <strong><u>VIRON Home-Business (&ldquo;VHB&rdquo;)</u> </strong>has been <u>verified </u>successfully!</p>
+        <p><strong style="color:#D00000;">NOTICE.</strong><br/>
+        <abbr style="color:#D00000;">Systematically, the <strong>VIRON Administrators</strong> will now proceed to set up your <strong style="color:#0000B3"><u>SAVE CLUB (SC)</u></strong> account <u>correctly</u> under the VIRON umbrella.</abbr> <abbr style="color:#0000B3;">NOTE: This action with the qualified third-party MLM company is performed automatically for you. The amount of $300 will be deducted from our ESCROW account to pay for your SC account and position.</abbr> <abbr style="color:#D00000;">This action will complete your VIRON Home-Business. <strong style="background-color: yellow;"><u>*You will receive Email notifications from </u></strong><strong style="background-color: yellow;"><u style="color:#0000B3;">SAVE CLUB (SC)</u><u> directly.</u></strong></abbr></p>
+        <ul style="background-color: yellow;">
+            <li style="color: #D00000;"><strong><u>For your benefit, you will have immediate access to the </u><u style="color:#0000B3">SAVE CLUB (SC)</u></strong><strong><u> product</u></strong><strong>.</strong></li>
+        </ul>
+        <hr/>
+        <p>*Again, <u>everything is professionally handled for you by VIRON</u>; Therefore, you do not need to review any of the SC newsletters, promotions, attend conferences/meetings, etc. <strong><u>You will only need to maintain your subscription with SC (annually) so that your account with SC stays active</u>.</strong></p>
+        <p>NOTE: While VIRON will be monitoring all aspects of your business for you, including SC for any important action you may need to take, we invite you to do the same by <em>keeping an eye out for anything that may require your attention</em>. <strong>This will ensure that there are no interruptions to your business while VIRON builds your SC downline.</strong></p>
+        <hr/>
+        <p><strong>P.S.</strong><br/>
+        Please also be aware that in your <strong>VIRON back-office / MEMBER CENTER</strong> / on the left <strong>DASHBOARD</strong> / under <strong>&ldquo;Your VIRON Home-Business (VHB) Account Status:&rdquo;</strong>&hellip;is now marked &ldquo;<strong style="color:green">Paid</strong>&rdquo;.</p>
+        <p style="text-align: center; margin: 40px 0"><a href="https://viron.network/member//#/loginPage" style="display: inline-block; padding: 12px 24px; background-color: #D00000; color: #ffffff; text-decoration: none; border-radius: 4px;" target="_blank">LOGIN to VIRON.NETWORK</a></p>
+        <p style="text-align: center; padding-top: 10px"><strong><em>-The VIRON Administration</em></strong></p>  
+    </td>
+    </tr>
+    <tr>
+      <td style="background-color:#f5f5f5; text-align:center; padding:20px; font-size:12px; color:#777;">
+        &copy; 2025 VIRON.NETWORK. All rights reserved.
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`
+        };
+
+        sgMail.send(msg)
+          .then(() => res.json({ message: 'User confirmed successfully and email sent.' }))
+          .catch(emailErr => res.json({ message: 'User confirmed, but email failed', error: emailErr.message }));
+      });
     });
   });
 });
