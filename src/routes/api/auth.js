@@ -262,7 +262,7 @@ router.post('/payment', normalUser, (req, res) => {
                   const msg = {
                     to: email,
                     from: 'admin@viron.network',
-                subject: `${first_name}  Your Payment is Processing – VIRON.NETWORK`,
+                subject: `${first_name},  Your Payment is Processing – VIRON.NETWORK`,
                     html: `<!DOCTYPE html>
 <html>
   <body style="font-family: Arial, sans-serif; color: #333; line-height: 1.6; max-width: 700px; margin: auto; padding: 2rem; background: #f9f9f9;">
