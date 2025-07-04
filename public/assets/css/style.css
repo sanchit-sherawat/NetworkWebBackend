@@ -41,6 +41,10 @@ body {
   color: var(--darkRedColor)
 }
 
+.text-highlight{
+  background-color:yellow;
+}
+
 .text-blue{
   color: var(--mainColor);
 }

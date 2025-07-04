@@ -87,7 +87,7 @@ router.post('/register', (req, res) => {
         const msg = {
           to: email,
           from: "admin@viron.network",
-          subject: 'Your Registration Confirmation - VIRON.NETWORK',
+          subject: `${firstName}, Your Registration Confirmation with VIRON.NETWORK`,
           html: `<!DOCTYPE html>
 <html>
 <head>
