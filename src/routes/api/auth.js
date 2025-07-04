@@ -112,7 +112,7 @@ router.post('/register', (req, res) => {
         <p>To log in to your VIRON.NETWORK account, use the Username and Password you&rsquo;ve just provided during your Registration, which is as follows:</p>
         <p><strong>Username:</strong> ${username}<br>
         <strong>Password:</strong> ${password}</p>
-        <p><strong>Member-Center Login Here:</strong><br /><a href="https://viron.network/member//#/login" target="_blank" style="display: inline-block; padding: 12px 24px; background-color: #D00000; color: #ffffff; text-decoration: none; border-radius: 4px;">LOGIN to VIRON.NETWORK</a></p>
+        <p><strong>Member-Center Login Here:</strong><br /><a href="https://viron.network/member/loginPage" target="_blank" style="display: inline-block; padding: 12px 24px; background-color: #D00000; color: #ffffff; text-decoration: none; border-radius: 4px;">LOGIN to VIRON.NETWORK</a></p>
         <p style="font-size: 12px; color: #0000B3;">*We advise you to secure your username & password.</p>
         </div>  
       </td>
@@ -124,7 +124,7 @@ router.post('/register', (req, res) => {
           <li style="margin-bottom: 20px;">All Sales and Purchases are subject to the VIRON <strong>Terms of Use</strong> as described at: <a href="https://viron.network/terms-of-use.html" target="_blank" style="color: #0000B3;">https://viron.network/terms-of-use.html</a> and governs the VIRON.NETWORK website and its members. It is located at the bottom of every web page on the VIRON.NETWORK website. Further, all Members, including you, acknowledge and agree to it every time you log in. So please review it entirely.</li>
           <li><strong>Important:</strong> Although VIRON will professionally handle all major work for you, it is essential that you understand it is <em><u>your</u></em> business. We advise that you familiarize yourself with all aspects of your VIRON business. We recommend that you visit all pages of the website and review all areas of your Back-Office to become familiar and fully understand VIRON&rsquo;s game-changing capabilities.</li>
         </ul>
-        <p style="text-align: center;"><a href="https://viron.network/member//#/login" target="_blank" style="display: inline-block; padding: 12px 24px; background-color: #D00000; color: #ffffff; text-decoration: none; border-radius: 4px;">LOGIN to VIRON.NETWORK</a></p>
+        <p style="text-align: center;"><a href="https://viron.network/member/loginPage" target="_blank" style="display: inline-block; padding: 12px 24px; background-color: #D00000; color: #ffffff; text-decoration: none; border-radius: 4px;">LOGIN to VIRON.NETWORK</a></p>
         <p>If you have any questions or need help, the best way to contact VIRON Member Support is to Email us at: <a href="mailto:Support@VIRON.NETWORK" style="color: #0000B3;">Support@VIRON.NETWORK</a>&nbsp;and our staff team will be happy to assist you during regular business hours.</p>
         <p><em><strong>Congratulations</strong></em><em><strong>and Welcome to the Evolution of Network Marketing! </strong></em></p>
         <p><br/><br/><strong><em>-The VIRON Administration</em></strong></p>

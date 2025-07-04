@@ -307,7 +307,7 @@ router.put('/users/:id/confirm', adminOnly, (req, res) => {
         const msg = {
           to: email,
           from: "admin@viron.network",
-          subject: `${first_name} , Your Payment is Now Verified`,
+          subject: `${first_name}, Your Payment is Now Verified!`,
           html: `<!DOCTYPE html>
 <html>
 <head>
@@ -401,7 +401,7 @@ router.put('/users/:id/refer', adminOnly, (req, res) => {
           const msgToUser = {
             to: userEmail,
             from: "admin@viron.network",
-            subject: `[${userFirstName}], Your DESIGNATED SPONSOR (DS) has been assigned.`,
+            subject: `${userFirstName}, Your DESIGNATED SPONSOR (DS) has been assigned.`,
             html: `
     <!DOCTYPE html>
 <html>
@@ -468,7 +468,7 @@ router.put('/users/:id/refer', adminOnly, (req, res) => {
           const msgToRefer = {
             to: referEmail,
             from: "admin@viron.network",
-            subject: `[${referFirstName}], Your VIRON Direct Referral (DR) is PLACED!`,
+            subject: `${referFirstName}, Your VIRON Direct Referral (DR) is PLACED!`,
             html: `
     <!DOCTYPE html>
 <html>
