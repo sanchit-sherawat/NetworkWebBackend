@@ -47,12 +47,13 @@
 	<!-- START NAV AREA -->
 	<div class="nav-area">
 		<div class="navbar-area">
-			<section id="user-profile-section" style="display: none; background-color: #f8f9fa; padding: 20px; text-align: center;">
-					<div class="container">
-						<div id="userInfo"></div>
-					</div>
-				</section>
-				<div class="main-nav">
+			<section id="user-profile-section"
+				style="display: none; background-color: #f8f9fa; padding: 20px; text-align: center;">
+				<div class="container">
+					<div id="userInfo"></div>
+				</div>
+			</section>
+			<div class="main-nav">
 				<nav class="navbar navbar-expand-md">
 					<div class="container">
 						<a class="navbar-brand" href="home">
@@ -149,10 +150,11 @@
 			<div class="row align-items-center">
 				<div data-aos="fade-up" data-aos-duration="1200" class="col-lg-12">
 					<div class="about-text">
-						<p>Hello&nbsp;<span id="firstName-display"></span>&nbsp;<span
-								id="lastName-display"></span>,</p>
-						<p>Congratulations! <br/>Your Registration has been received and your VIRON.NETWORK account has been created.</p>
-						<p>You are now registered and is valuably&nbsp;<strong><u>Time &amp; Date Stamped</u></strong>: <strong><span id="createdAt-display" style="font-weight:bold;"></span></strong>.</p>
+						<p>Hello&nbsp;<span id="firstName-display"></span>&nbsp;<span id="lastName-display"></span>,</p>
+						<p>Congratulations! <br />Your Registration has been received and your VIRON.NETWORK account has
+							been created.</p>
+						<p>You are now registered and is valuably&nbsp;<strong><u>Time &amp; Date Stamped</u></strong>:
+							<strong><span id="createdAt-display" style="font-weight:bold;"></span></strong>.</p>
 						<p>Before you log-in, please take a minute to review this entire page.</p>
 					</div>
 					<div class="about-text text-center"
@@ -166,23 +168,38 @@
 						<p><strong>UserName:</strong>&nbsp;<span
 								id="username-display"></span><br /><strong>Password:</strong>&nbsp;<span
 								id="password-display"></span></p>
-						<p><strong style="font-size: 20px;">Member-Center Login Here:</strong><br /><a href="https://viron.network/member//#/loginPage" class="default-btn" style="text-transform: none;">LOGIN to VIRON.NETWORK</a></p>
+						<p><strong style="font-size: 20px;">Member-Center Login Here:</strong><br /><a
+								href="https://viron.network/member//#/loginPage" class="default-btn"
+								style="text-transform: none;">LOGIN to VIRON.NETWORK</a></p>
 						<p class="text-blue">*We advise you to secure your username & password.</p>
 					</div>
 					<div class="about-text" style="margin-top: 30px;">
 						<p class="text-center"><strong>FOR YOUR CONVENIENCE:</strong></p>
-						<p><strong>For your record, we have also sent to your Email: <abber class="text-highlight">___________________</abber> containing the above information. *Just in case, please check your Email and spam folder.</strong></p>
+						<p>
+							<strong>
+								For your record, we have also sent to your Email:
+								<span id="email-display" class="text-highlight">___________________</span>
+								containing the above information.
+								*Just in case, please check your Email and spam folder.
+							</strong>
+						</p>
 						<p class="text-center"><strong>GENERAL NOTICES &amp; FYI's:</strong></p>
 						<ul>
 							<li style="margin-bottom: 20px;">All Sales and Purchases are subject to the VIRON
 								<strong>Terms of Use</strong> as described at: <a
-									href="https://viron.network/terms-of-use.html" target="_blank">https://viron.network/terms-of-use.html</a>
+									href="https://viron.network/terms-of-use.html"
+									target="_blank">https://viron.network/terms-of-use.html</a>
 								and governs the VIRON.NETWORK website and its members. It is located at the bottom of
 								every web page on the VIRON.NETWORK website. Further, all Members, including you,
-								acknowledge and agree to it every time you log in. So please review it entirely.</li>
-							<li><strong>IMPORTANT:</strong> Although VIRON will professionally handle all major work for you, it is essential that you understand it is <em><u>your</u></em> business. We advise that you familiarize yourself with all aspects of your VIRON business. We recommend that you visit all pages of the website and review all areas of your Back-Office.</li>
+								acknowledge and agree to it every time you log in. So please review it entirely.
+							</li>
+							<li><strong>IMPORTANT:</strong> Although VIRON will professionally handle all major work for
+								you, it is essential that you understand it is <em><u>your</u></em> business. We advise
+								that you familiarize yourself with all aspects of your VIRON business. We recommend that
+								you visit all pages of the website and review all areas of your Back-Office.</li>
 						</ul>
-						<p class="text-center"><a href="https://viron.network/member//#/loginPage" class="default-btn" style="text-transform: none;">LOGIN to VIRON.NETWORK</a></p>
+						<p class="text-center"><a href="https://viron.network/member//#/loginPage" class="default-btn"
+								style="text-transform: none;">LOGIN to VIRON.NETWORK</a></p>
 						<p>If you have any questions or need help, the best way to contact VIRON Member Support is to
 							Email us at: <a href="mailto:Support@VIRON.NETWORK">Support@VIRON.NETWORK</a>&nbsp;and our
 							staff team will be happy to assist you during regular business hours.</p>
@@ -328,10 +345,10 @@
 		<i class='bx bx-chevrons-up'></i>
 	</div>
 	<!-- END GO TOP AREA -->
-<script>
+	<script>
 		document.addEventListener('DOMContentLoaded', function () {
-					const section = document.getElementById("user-profile-section");
-						const container = document.getElementById("userInfo");
+			const section = document.getElementById("user-profile-section");
+			const container = document.getElementById("userInfo");
 
 			// Get values from localStorage
 			const userName = localStorage.getItem("userName");
@@ -390,6 +407,8 @@
 
 			const firstName = params.get('firstName');
 			const lastName = params.get('lastName');
+			const email = params.get('email'); // Assuming email is also passed as a query parameter
+			alert(email);
 
 			const password = params.get('password'); // Assuming password is also passed as a query parameter
 
@@ -406,22 +425,25 @@
 			if (password) {
 				document.getElementById('password-display').textContent = password;
 			}
+			if (email) {
+				document.getElementById('email-display').textContent = email;
+			}
 
 
-    if (username) {
-        fetch(`/api/user-created-at?username=${encodeURIComponent(username)}`)
-            .then(res => res.json())
-            .then(data => {
-                if (data.createdAt) {
-                    const date = new Date(data.createdAt);
-                    const formatted = date.toLocaleString();
-                    document.getElementById('createdAt-display').textContent = formatted;
-                }
-            })
-            .catch(() => {
-                // Optionally handle error
-            });
-    }
+			if (username) {
+				fetch(`/api/user-created-at?username=${encodeURIComponent(username)}`)
+					.then(res => res.json())
+					.then(data => {
+						if (data.createdAt) {
+							const date = new Date(data.createdAt);
+							const formatted = date.toLocaleString();
+							document.getElementById('createdAt-display').textContent = formatted;
+						}
+					})
+					.catch(() => {
+						// Optionally handle error
+					});
+			}
 		});
 	</script>
 
