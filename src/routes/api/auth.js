@@ -79,9 +79,12 @@ router.post('/register', (req, res) => {
       ],
       (err2, result) => {
         if (err2) return res.status(500).json({ message: 'Error inserting user', error: err2 });
-        const ubuntuTime = new Date().toLocaleString('en-GB', { timeZone: 'UTC' }); // or system time zone
-
-
+        const ubuntuTime = new Date().toLocaleDateString('en-US', {
+          timeZone: 'UTC',
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit'
+        });
 
         console.log("database me dal deya gya hai ")
         const msg = {
@@ -243,7 +246,7 @@ router.post('/payment', normalUser, (req, res) => {
           }
 
           // 3. Insert new payment record
-                // 3. Insert new payment record
+          // 3. Insert new payment record
           db.query(
             'INSERT INTO payment_transaction (user_id, btc_transaction, eth_transaction, usdt_transaction) VALUES (?, ?, ?, ?)',
             [user_id, btc_txn, eth_txn, usdt_txn],
@@ -262,7 +265,7 @@ router.post('/payment', normalUser, (req, res) => {
                   const msg = {
                     to: email,
                     from: 'admin@viron.network',
-                subject: `${first_name},  Your Payment is Processing – VIRON.NETWORK`,
+                    subject: `${first_name},  Your Payment is Processing – VIRON.NETWORK`,
                     html: `<!DOCTYPE html>
 <html>
   <body style="font-family: Arial, sans-serif; color: #333; line-height: 1.6; max-width: 700px; margin: auto; padding: 2rem; background: #f9f9f9;">
