@@ -296,38 +296,51 @@
 		</div>
 		<!-- END GO TOP AREA -->
 <script>
-		document.addEventListener('DOMContentLoaded', function () {
-					const section = document.getElementById("user-profile-section");
+		(function () {
+			const knownPages = [
+				"about", "services", "contact", "home", "team", "mission",
+				"works", "testimonials", "register", "login", "set-password",
+				"confirmation", "faq.html", "privacy-policy.html", "disclaimer.html",
+				"terms-of-use.html", "service-agreement.html"
+			];
+
+			const path = window.location.pathname.replace(/^\/+|\/+$/g, '');
+			// Clear localStorage if path is empty (homepage)
+			if (!path) {
+				localStorage.removeItem("userName");
+				localStorage.removeItem("firstName");
+				localStorage.removeItem("lastName");
+			}
+
+			if (path && !knownPages.includes(path)) {
+				fetch(`/api/getuser/${path}`)
+					.then(res => res.json())
+					.then(user => {
+						const section = document.getElementById("user-profile-section");
 						const container = document.getElementById("userInfo");
 
-			// Get values from localStorage
-			const userName = localStorage.getItem("userName");
-			const firstName = localStorage.getItem("firstName");
-			const lastName = localStorage.getItem("lastName");
-
-			// // Show in elements with specific IDs
-			// if (userName) {
-			// 	const el = document.getElementById('userName-display');
-			// 	// if (el) el.textContent = userName;
-			// }
-			// if (firstName) {
-			// 	const el = document.getElementById('firstName-display');
-			// 	// if (el) el.textContent = firstName;
-			// }
-			// if (lastName) {
-			// 	const el = document.getElementById('lastName-display');
-			// 	// if (el) el.textContent = lastName;
-			// }
-
-			// Only show if firstName and lastName exist
-			if (firstName && lastName && container) {
-				section.style.display = 'block'; // Make the section visible
-				container.innerHTML = `
-        <p>Welcome to ${firstName} ${lastName}'s ADVISOR website!</p>
-      `;
+						if (user && user.userName) {
+							localStorage.setItem("userName", user.userName);
+							localStorage.setItem("firstName", user.firstName);
+							localStorage.setItem("lastName", user.lastName);
+							section.style.display = "block";
+							container.innerHTML = `
+              <p>Welcome to  ${user.firstName}  ${user.lastName} website!</p>
+            `;
+						} else {
+							localStorage.removeItem("userName");
+							localStorage.removeItem("firstName");
+							localStorage.removeItem("lastName");
+						}
+					})
+					.catch(err => {
+						document.getElementById("user-profile-section").style.display = "block";
+						document.getElementById("userInfo").innerHTML = `<p class="text-danger">Error fetching user info.</p>`;
+					});
 			}
-		});
+		})();
 	</script>
+
         <!-- JQUERY.SLIM.MIN.JS -->
         <script src="assets/js/jquery.slim.min.js"></script>
         <!-- POPPER JS -->
