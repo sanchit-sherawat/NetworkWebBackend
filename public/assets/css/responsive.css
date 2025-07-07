@@ -7,6 +7,9 @@
     padding-left: 0px;
     padding-right: 0px;
 }
+.pl-40{
+  padding-left: 0px!important;
+}
   .ptb-100 {
     padding-top: 50px;
     padding-bottom: 50px;
