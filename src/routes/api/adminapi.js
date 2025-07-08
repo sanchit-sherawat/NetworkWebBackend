@@ -287,9 +287,9 @@ router.put('/users/:id/confirm', adminOnly, (req, res) => {
   db.query('SELECT id FROM payment_transaction WHERE user_id = ?', [userId], (err, results) => {
     if (err) return res.status(500).json({ message: 'Database error', error: err });
 
-    if (results.length === 0) {
-      return res.status(400).json({ message: 'No payment found for this user. Cannot confirm.' });
-    }
+    // if (results.length === 0) {
+    //   return res.status(400).json({ message: 'No payment found for this user. Cannot confirm.' });
+    // }
 
     // Set is_confirmation = 1
     db.query('UPDATE users SET is_confirmation = 1 WHERE id = ?', [userId], (err2, result) => {
