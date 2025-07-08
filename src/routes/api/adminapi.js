@@ -359,6 +359,24 @@ router.put('/users/:id/confirm', adminOnly, (req, res) => {
   });
 });
 
+router.put('/users/:id/editrefer', adminOnly, (req, res) => {
+  const userId = req.params.id;
+  const { userReferId } = req.body;
+
+  if (!userReferId) {
+    return res.status(400).json({ message: 'userReferId is required' });
+  }
+
+  db.query(
+    'UPDATE users SET user_refer_id = ? WHERE id = ?',
+    [userReferId, userId],
+    (err, result) => {
+      if (err) return res.status(500).json({ message: 'Database error', error: err });
+      if (result.affectedRows === 0) return res.status(404).json({ message: 'User not found' });
+      res.json({ message: 'User refer updated successfully' });
+    }
+  );
+});
 
 // Admin: Update user_refer_id for a user
 router.put('/users/:id/refer', adminOnly, (req, res) => {
