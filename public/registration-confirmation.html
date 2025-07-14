@@ -46,7 +46,13 @@
 
 	<!-- START NAV AREA -->
 	<div class="nav-area">
+		<section id="user-profile-section" style="display: none; background-color: #f8f9fa; padding: 20px; text-align: center;">
+					<div class="container">
+						<div id="userInfo"></div>
+					</div>
+				</section>
 		<div class="navbar-area">
+			
 			<section id="user-profile-section"
 				style="display: none; background-color: #f8f9fa; padding: 20px; text-align: center;">
 				<div class="container">
@@ -424,6 +430,8 @@
 			const email = params.get('email'); // Assuming email is also passed as a query parameter
 			// alert(email);
 
+
+
 			const password = params.get('password'); // Assuming password is also passed as a query parameter
 
 			if (username) {
@@ -465,6 +473,20 @@
 					.catch(() => {
 						// Optionally handle error
 					});
+			}
+		});
+	</script>
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			if (localStorage.getItem("userName")) {
+				const section = document.getElementById("user-profile-section");
+				const container = document.getElementById("userInfo");
+				if (section && container) {
+					section.style.display = "block";
+					container.innerHTML = `
+                <p>Welcome to  ${localStorage.getItem("firstName")}  ${localStorage.getItem("lastName")} website!</p>
+            `;
+				}
 			}
 		});
 	</script>

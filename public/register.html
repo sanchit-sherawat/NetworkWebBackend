@@ -348,6 +348,15 @@
 				"terms-of-use.html", "service-agreement.html"
 			];
 
+						if (localStorage.getItem("userName")) {
+  const section = document.getElementById("user-profile-section");
+  const container = document.getElementById("userInfo");
+  section.style.display = "block";
+  container.innerHTML = `
+    <p>Welcome to  ${localStorage.getItem("firstName")}  ${localStorage.getItem("lastName")} website!</p>
+  `;
+}
+
 			const path = window.location.pathname.replace(/^\/+|\/+$/g, '');
 			// Clear localStorage if path is empty (homepage)
 			if (!path) {
@@ -488,6 +497,15 @@
 			// }
 		});
 	</script>
+	<script>
+document.addEventListener("DOMContentLoaded", function () {
+    // Pre-fill the referrer username input if userName is in localStorage
+    var refInput = document.getElementById('user_name');
+    if (refInput && localStorage.getItem("userName")) {
+        refInput.value = localStorage.getItem("userName");
+    }
+});
+</script>
 	<!-- <script>
 		// Username check
 		const usernameInput = document.getElementById('user_name');

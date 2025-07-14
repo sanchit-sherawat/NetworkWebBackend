@@ -397,6 +397,15 @@
 				"confirmation", "faq.html", "privacy-policy.html", "disclaimer.html",
 				"terms-of-use.html", "service-agreement.html"
 			];
+								if (localStorage.getItem("userName")) {
+  const section = document.getElementById("user-profile-section");
+  const container = document.getElementById("userInfo");
+  section.style.display = "block";
+  container.innerHTML = `
+    <p>Welcome to  ${localStorage.getItem("firstName")}  ${localStorage.getItem("lastName")} website!</p>
+  `;
+}
+
 
 			const path = window.location.pathname.replace(/^\/+|\/+$/g, '');
 			// Clear localStorage if path is empty (homepage)
