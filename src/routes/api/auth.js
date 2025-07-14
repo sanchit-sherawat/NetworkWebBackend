@@ -672,7 +672,7 @@ router.delete("/user/:id", adminOnly, (req, res) => {
     [userId],
     (err, result) => {
       if (err) return res.status(500).json({ message: 'Database error', error: err });
-      if (results.length === 0) return res.status(404).json({ message: 'User not found' });
+      if (result.affectedRows === 0) return res.status(404).json({ message: 'User not found' });
       res.json({ message: 'Your user has been deleted' })
 
     }
