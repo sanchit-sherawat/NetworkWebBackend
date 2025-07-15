@@ -79,11 +79,15 @@ router.post('/register', (req, res) => {
       ],
       (err2, result) => {
         if (err2) return res.status(500).json({ message: 'Error inserting user', error: err2 });
-        const ubuntuTime = new Date().toLocaleDateString('en-US', {
+        const ubuntuDateTime = new Date().toLocaleString('en-US', {
           timeZone: 'UTC',
           year: 'numeric',
           month: '2-digit',
-          day: '2-digit'
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: false  // use true for 12-hour format with AM/PM
         });
 
         console.log("database me dal deya gya hai ")
@@ -103,7 +107,7 @@ router.post('/register', (req, res) => {
       <td style="padding: 30px;">
         <p>Hello ${firstName}&nbsp;${lastName},</p>
         <p>Congratulations!<br />Your Registration has been received and your VIRON.NETWORK account has been created.</p>
-        <p>You are now registered and is valuably&nbsp;<strong><u>Time &amp; Date Stamped : ${ubuntuTime} UTC</u></strong>.</p>
+        <p>You are now registered and is valuably&nbsp;<strong><u>Time &amp; Date Stamped : ${ubuntuDateTime} UTC</u></strong>.</p>
         <p>Before you log-in, please take a minute to review this entire page.</p>
       </td>
     </tr>
@@ -717,7 +721,7 @@ router.get('/getuser/:username', (req, res) => {
 
 
 // Get payment status and referrer info for a user
-router.get('/user-payment-status/:userId',async (req, res) => {
+router.get('/user-payment-status/:userId', async (req, res) => {
   const userId = req.params.userId;
 
   console.log("userId is :", userId)
