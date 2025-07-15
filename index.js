@@ -89,6 +89,21 @@ const routeMap = {
   login: 'login.html',
   'set-password': 'set-password.html',
   confirmation: 'registration-confirmation.html',
+  faq: 'faq.html',
+  privacy: 'privacy-policy.html',
+  terms: 'terms-of-use.html',
+  disclaimer: 'disclaimer.html',
+  "service-agreement": "service-agreement.html",
+  "reverend-abraham-yewo": "reverend-abraham-yewo.html",
+  "mr-kevin-rhodes": "mr-kevin-rhodes.html",
+  "mr-le-hoang-Vinh": "mr-le-hoang-vinh.html",
+  "mr-jason-paul": "mr-jason-paul.html",
+  "ms-jennifer-smylie": "ms-jennifer-smylie.html",
+  "dr-la-sheika-hill": "dr-la-sheika-hill.html",
+  "professional-salesman-international": "professional-salesman-international.html",
+  "viron-advanced-intelligence-vai": "viron-advanced-intelligence-vai.html",
+  "viron-consortium-international-vci": "viron-consortium-international-vci.html",
+
   // Add more as needed
 };
 
