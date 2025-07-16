@@ -84,7 +84,7 @@ const routeMap = {
   "our-mission": 'our-mission.html',
   testimonials: 'testimonials.html',
   "contact-us": 'contact-us.html',
-  register: 'register.html',
+  registration: 'register.html',
   login: 'login.html',
   'set-password': 'set-password.html',
   confirmation: 'registration-confirmation.html',
@@ -102,7 +102,6 @@ const routeMap = {
   "terms-of-use": 'terms-of-use.html',
   disclaimer: 'disclaimer.html',
   "service-agreement": "service-agreement.html",
-  'our-services': 'our-services.html',
   // Add more as needed
 };
 
