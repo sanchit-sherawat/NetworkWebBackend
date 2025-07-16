@@ -295,8 +295,6 @@ router.post('/payment', normalUser, (req, res) => {
       <p style="color: #0000B3; text-align:center; margin-bottom:5px; padding-bottom:0px;"><strong>VIRON MEMBER SUPPORT:</strong></p>
       <p>If you have any questions or need help, the best way to contact VIRON Member Support is via our CONTACT US page or via Email: <a href="mailto:Support@VIRON.NETWORK" style="color: #0000B3;">Support@VIRON.NETWORK</a>. Our staff team will be happy to assist you during regular business hours.</p>
     <hr/>
-      <p style="color: #0000B3;"><strong><u>JUST IN CASE YOU CANNOT GET BACK TO THIS PAGE</u></strong>, our system has also sent you an Email notification containing the same information that is on this page. *When checking your email, please don&rsquo;t forget to check your spam folder as well.</p>
-    <hr/>
     <p style="text-align:center"><strong><em>Welcome to the Evolution of Network Marketing!</em></strong></p>
     <p style="text-align:center"><strong><em>-The VIRON Administration</em></strong></p>
   </body>
