@@ -153,7 +153,6 @@ router.post('/register', (req, res) => {
       enableText: false,
     },
   },
-};
         };
 
         sgMail.send(msg)
