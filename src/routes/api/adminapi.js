@@ -348,7 +348,14 @@ router.put('/users/:id/confirm', adminOnly, (req, res) => {
     </tr>
   </table>
 </body>
-</html>`
+</html>`,
+// Disable SendGrid's automatic click tracking
+  trackingSettings: {
+    clickTracking: {
+      enable: false,
+      enableText: false,
+    },
+  }
         };
 
         sgMail.send(msg)
@@ -481,7 +488,14 @@ router.put('/users/:id/refer', adminOnly, (req, res) => {
 </body>
 </html>
 
-  `
+  `,
+  // Disable SendGrid's automatic click tracking
+  trackingSettings: {
+    clickTracking: {
+      enable: false,
+      enableText: false,
+    },
+  }
           };
           const msgToRefer = {
             to: referEmail,
@@ -540,7 +554,14 @@ router.put('/users/:id/refer', adminOnly, (req, res) => {
 </body>
 </html>
 
-  `
+  `,
+  // Disable SendGrid's automatic click tracking
+  trackingSettings: {
+    clickTracking: {
+      enable: false,
+      enableText: false,
+    },
+  }
           };
           // console.log("msgToUser is :", msgToUser)
           // console.log("msgToRefer is :", msgToRefer)

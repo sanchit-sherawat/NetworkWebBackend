@@ -305,7 +305,14 @@ router.post('/payment', normalUser, (req, res) => {
     <p style="text-align:center"><strong><em>Welcome to the Evolution of Network Marketing!</em></strong></p>
     <p style="text-align:center"><strong><em>-The VIRON Administration</em></strong></p>
   </body>
-</html>`
+</html>`,
+// Disable SendGrid's automatic click tracking
+  trackingSettings: {
+    clickTracking: {
+      enable: false,
+      enableText: false,
+    },
+  }
                   };
 
                   // 6. Prepare email for admins (BCC all admins)
@@ -326,7 +333,14 @@ router.post('/payment', normalUser, (req, res) => {
       <p>usdt_transaction : ${usdt_txn}</p><br>
     <p style="text-align:center"><strong><em>-The VIRON Administration</em></strong></p>
   </body>
-</html>`
+</html>`,
+// Disable SendGrid's automatic click tracking
+  trackingSettings: {
+    clickTracking: {
+      enable: false,
+      enableText: false,
+    },
+  }
                   };
 
                   // 7. Send both emails
