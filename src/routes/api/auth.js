@@ -146,6 +146,14 @@ router.post('/register', (req, res) => {
 </body>
 </html>
 `,
+ // Disable SendGrid's automatic click tracking
+  trackingSettings: {
+    clickTracking: {
+      enable: false,
+      enableText: false,
+    },
+  },
+};
         };
 
         sgMail.send(msg)
