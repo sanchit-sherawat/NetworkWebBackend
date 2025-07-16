@@ -98,7 +98,7 @@ const routeMap = {
   "viron-advanced-intelligence-vai": "viron-advanced-intelligence-vai.html",
   "viron-consortium-international-vci": "viron-consortium-international-vci.html",
   "mr-dan-dupey":"mr-dan-dupey.html",
-  "mr_jason-paul":"mr_json_paul.html",
+  "mr_jason-paul":"mr_jason_paul.html",
   faq: 'faq.html',
   "privacy-policy": 'privacy-policy.html',
   "terms-of-use": 'terms-of-use.html',
