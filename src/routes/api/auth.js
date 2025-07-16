@@ -93,7 +93,7 @@ router.post('/register', (req, res) => {
         console.log("database me dal deya gya hai ")
         const msg = {
           to: email,
-          from: `"VIRON NETWORK" <admin@viron.network>`,
+          from: `VIRON NETWORK <admin@viron.network>`,
           subject: `${firstName}, Your Registration Confirmation with VIRON.NETWORK`,
           html: `<!DOCTYPE html>
 <html>
@@ -268,7 +268,7 @@ router.post('/payment', normalUser, (req, res) => {
                   // 5. Prepare email for user
                   const msg = {
                     to: email,
-                    from: `"VIRON NETWORK" <admin@viron.network>`,
+                    from: `VIRON NETWORK <admin@viron.network>`,
                     subject: `${first_name},  Your Payment is Processing – VIRON.NETWORK`,
                     html: `<!DOCTYPE html>
 <html>
@@ -306,7 +306,7 @@ router.post('/payment', normalUser, (req, res) => {
                   // 6. Prepare email for admins (BCC all admins)
                   const msgToAdmins = {
                     to: adminEmails,
-                    from: `"VIRON NETWORK" <admin@viron.network>`,
+                    from: `VIRON NETWORK <admin@viron.network>`,
                     subject: `New Payment Submitted by ${first_name} ${last_name}`,
                     html: `<!DOCTYPE html>
 <html>
