@@ -77,23 +77,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Route mapping for static pages
 const routeMap = {
-  about: 'about-us.html',
-  services: 'our-services.html',
-  contact: 'contact-us.html',
   home: 'index.html',
-  team: 'meet-our-team.html',
-  mission: 'our-mission.html',
-  works: 'how-it-works.html',
+  "how-it-works": 'how-it-works.html',
+  "about-us": 'about-us.html',
+  "meet-our-team": 'meet-our-team.html',
+  "our-mission": 'our-mission.html',
   testimonials: 'testimonials.html',
+  "contact-us": 'contact-us.html',
   register: 'register.html',
   login: 'login.html',
   'set-password': 'set-password.html',
   confirmation: 'registration-confirmation.html',
-  faq: 'faq.html',
-  "privacy-policy": 'privacy-policy.html',
-  "terms-of-use": 'terms-of-use.html',
-  disclaimer: 'disclaimer.html',
-  "service-agreement": "service-agreement.html",
   "reverend-abraham-yew": "reverend-abraham-yew.html",
   "mr-kevin-rhodes": "mr-kevin-rhodes.html",
   "mr-le-hoang-Vinh": "mr-le-hoang-Vinh.html",
@@ -103,7 +97,12 @@ const routeMap = {
   "professional-salesman-international": "professional-salesman-international.html",
   "viron-advanced-intelligence-vai": "viron-advanced-intelligence-vai.html",
   "viron-consortium-international-vci": "viron-consortium-international-vci.html",
-
+  faq: 'faq.html',
+  "privacy-policy": 'privacy-policy.html',
+  "terms-of-use": 'terms-of-use.html',
+  disclaimer: 'disclaimer.html',
+  "service-agreement": "service-agreement.html",
+  'our-services': 'our-services.html',
   // Add more as needed
 };
 
