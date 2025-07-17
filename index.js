@@ -99,6 +99,7 @@ const routeMap = {
   "viron-consortium-international-vci": "viron-consortium-international-vci.html",
   "mr-dan-dupey":"mr-dan-dupey.html",
   "mr_jason-paul":"mr_jason_paul.html",
+  "mr-levy-oen":"mr-levy-oen.html",
   faq: 'faq.html',
   "privacy-policy": 'privacy-policy.html',
   "terms-of-use": 'terms-of-use.html',
