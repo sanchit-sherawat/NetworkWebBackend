@@ -93,8 +93,17 @@ a:focus {
 .mt-0{
   margin-top: 0px;
 }
+
 .mb-20{
   margin-bottom: 20px!important;
+}
+
+.mb-10{
+  margin-bottom: 10px!important;
+}
+
+.mmb-5{
+  margin-bottom: 5px!important;
 }
 
 .mt-32{

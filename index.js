@@ -97,9 +97,15 @@ const routeMap = {
   "professional-salesman-international": "professional-salesman-international.html",
   "viron-advanced-intelligence-vai": "viron-advanced-intelligence-vai.html",
   "viron-consortium-international-vci": "viron-consortium-international-vci.html",
+  "mr-lance-nelkin":"mr-lance-nelkin.html",
+  "mr-gavin-little":"mr-gavin-little.html",
   "mr-dan-dupey":"mr-dan-dupey.html",
-  "mr_jason-paul":"mr_jason_paul.html",
   "mr-levy-oen":"mr-levy-oen.html",
+  "mr_jason-paul":"mr_jason_paul.html",
+  "ms_jennifer-smylie":"ms_jennifer-smylie.html",
+  "dr_la-sheika-scales": "dr_la-sheika-scales.html",
+  
+  
   faq: 'faq.html',
   "privacy-policy": 'privacy-policy.html',
   "terms-of-use": 'terms-of-use.html',
