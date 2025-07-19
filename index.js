@@ -104,8 +104,7 @@ const routeMap = {
   "mr_jason-paul":"mr_jason_paul.html",
   "ms_jennifer-smylie":"ms_jennifer-smylie.html",
   "dr_la-sheika-scales": "dr_la-sheika-scales.html",
-  
-  
+  "mr_kevin-rhodes": "mr_kevin-rhodes.html",
   faq: 'faq.html',
   "privacy-policy": 'privacy-policy.html',
   "terms-of-use": 'terms-of-use.html',
