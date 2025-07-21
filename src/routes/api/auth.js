@@ -798,6 +798,145 @@ router.get('/user-payment-status/:userId', async (req, res) => {
   );
 });
 
+
+
+router.post('/verify-email', (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ message: 'Email is required' });
+  }
+
+  // Step 1: Check if email exists
+  db.query(`SELECT id, first_name, last_name FROM users WHERE email = ? LIMIT 1`, [email], (err, results) => {
+    if (err) return res.status(500).json({ message: 'Database error', error: err });
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'Email not found' });
+    }
+
+    const user = results[0];
+
+    // Step 2: Generate verification code (6-digit)
+    const verificationCode = crypto.randomInt(100000, 999999).toString();
+
+    // Step 3: Store code in DB
+    db.query(
+      `UPDATE users SET email_verification_code = ?, code_generated_at = NOW() WHERE email = ?`,
+      [verificationCode, email],
+      (updateErr) => {
+        if (updateErr) return res.status(500).json({ message: 'Failed to store verification code', error: updateErr });
+
+        // Step 4: Send email
+        const msg = {
+          to: email,
+          from: `VIRON NETWORK <admin@viron.network>`,
+          subject: `Your Email Verification Code - VIRON.NETWORK`,
+          html: `
+            <p>Hello ${user.first_name} ${user.last_name},</p>
+            <p>Your email verification code is:</p>
+            <h2>${verificationCode}</h2>
+            <p>This code is valid for 10 minutes.</p>
+            <p>If you didn't request this, please ignore.</p>
+          `,
+          trackingSettings: {
+            clickTracking: { enable: false, enableText: false },
+          },
+        };
+
+        sgMail
+          .send(msg)
+          .then(() => {
+            res.json({ message: 'Verification code sent successfully' });
+          })
+          .catch((mailErr) => {
+            console.error('Email send error:', mailErr);
+            res.status(500).json({ message: 'Failed to send verification email', error: mailErr.message });
+          });
+      }
+    );
+  });
+});
+
+
+router.post('/send-password-reset-code', (req, res) => {
+  const { email } = req.body;
+
+  if (!email) return res.status(400).json({ message: 'Email is required' });
+
+  db.query(`SELECT first_name, last_name FROM users WHERE email = ? LIMIT 1`, [email], (err, results) => {
+    if (err) return res.status(500).json({ message: 'Database error', error: err });
+    if (results.length === 0) return res.status(404).json({ message: 'Email not found' });
+
+    const { first_name, last_name } = results[0];
+    const resetCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+
+    db.query(`UPDATE users SET reset_code = ?, reset_code_generated_at = NOW() WHERE email = ?`,
+      [resetCode, email],
+      (updateErr) => {
+        if (updateErr) return res.status(500).json({ message: 'Failed to save reset code', error: updateErr });
+
+        const msg = {
+          to: email,
+          from: `VIRON NETWORK <admin@viron.network>`,
+          subject: 'Password Reset Code - VIRON.NETWORK',
+          html: `
+            <p>Hello ${first_name} ${last_name},</p>
+            <p>Your password reset verification code is:</p>
+            <h2>${resetCode}</h2>
+            <p>This code is valid for 10 minutes.</p>
+          `,
+          trackingSettings: { clickTracking: { enable: false, enableText: false } },
+        };
+
+        sgMail
+          .send(msg)
+          .then(() => res.json({ message: 'Reset code sent successfully' }))
+          .catch((mailErr) => res.status(500).json({ message: 'Email send failed', error: mailErr.message }));
+      });
+  });
+});
+
+router.put('/reset-password', async (req, res) => {
+  const { email, code, password } = req.body;
+
+  if (!email || !code || !password) {
+    return res.status(400).json({ message: 'Email, code, and password are required' });
+  }
+
+  db.query(
+    `SELECT reset_code, TIMESTAMPDIFF(MINUTE, reset_code_generated_at, NOW()) AS minutes_passed
+     FROM users WHERE email = ? LIMIT 1`,
+    [email],
+    async (err, results) => {
+      if (err) return res.status(500).json({ message: 'Database error', error: err });
+      if (results.length === 0) return res.status(404).json({ message: 'Email not found' });
+
+      const { reset_code, minutes_passed } = results[0];
+
+      if (reset_code !== code) {
+        return res.status(400).json({ message: 'Invalid code' });
+      }
+      if (minutes_passed > 10) {
+        return res.status(400).json({ message: 'Code expired' });
+      }
+
+      // Hash password before storing
+      // const hashedPassword = await bcrypt.hash(password, 10);\
+
+      db.query(
+        `UPDATE users SET password = ?, reset_code = NULL, reset_code_generated_at = NULL WHERE email = ?`,
+        [password, email],
+        (updateErr) => {
+          if (updateErr) return res.status(500).json({ message: 'Failed to update password', error: updateErr });
+          res.json({ message: 'Password updated successfully' });
+        }
+      );
+    }
+  );
+});
+
 // ...existing code...
 
 module.exports = router;
